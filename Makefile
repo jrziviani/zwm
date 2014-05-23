@@ -17,8 +17,8 @@ main: keymap.o helper.o xlibpp.o xlibwindow.o
 		build/xlibwindow.o \
 		$(LIBS) -o main
 
-xlibpp.o: src/xlibpp.cpp include/xlibpp.h
-	$(CC) $(CFLAGS) $(INCLUDE) -c src/xlibpp.cpp -o build/xlibpp.o
+xlibpp.o: src/xlibimp/xlibpp.cpp include/xlibimp/xlibpp.h
+	$(CC) $(CFLAGS) $(INCLUDE) -c src/xlibimp/xlibpp.cpp -o build/xlibpp.o
 
 helper.o: src/helper.cpp include/helper.h
 	$(CC) $(CFLAGS) $(INCLUDE) -c src/helper.cpp -o build/helper.o
