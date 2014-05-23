@@ -1,6 +1,6 @@
 #include "keymap.h"
 
-KeyMap::KeyMap(KeySym key,
+KeyMap::KeyMap(keysym key,
                unsigned int modkey1,
                unsigned int modkey2,
                std::string program)
@@ -10,7 +10,7 @@ KeyMap::KeyMap(KeySym key,
 
 }
 
-KeySym KeyMap::getKey()
+keysym KeyMap::getKey()
 {
     return _key;
 }
