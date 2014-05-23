@@ -72,7 +72,7 @@ int xlibpp::initRootWindow(int screenNumber)
     drawBar();
 }
 
-void xlibpp::setMaps(const std::vector<KeyMap>& keys)
+void xlibpp::setMaps(const KeyMaps& keys)
 {
     _keyMaps = keys;
 

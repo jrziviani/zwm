@@ -1,21 +1,6 @@
 #ifndef _XLIBPP_H
 #define _XLIBPP_H
 
-/*****************************************************************************
- *
- * +---------------------------------------------------+-------------------+
- * | status bar                                        | notification bar  |
- * +---------------------------------------------------+-------------------+
- * |                                                   |                   |
- * |                                                   |                   |
- * |                                                   |                   |
- *...                                                 ...                 ...
- * |                                                   |                   |
- * +---------------------------------------------------+-------------------+
- *
- * g++ src/main.cpp src/xlibpp.cpp -o main -Iinclude -std=c++11 -lX11
- *****************************************************************************/
-
 #include "keymap.h"
 
 #include <memory>
@@ -36,7 +21,7 @@ class xlibpp
         int numberOfScreens();
 
         int initRootWindow(int screenNumber);
-        void setMaps(const std::vector<KeyMap>& keys);
+        void setMaps(const KeyMaps& keys);
         Window getWindowByPID(unsigned long pid);
 
         void loop();
@@ -44,7 +29,6 @@ class xlibpp
         void drawBar();
 
     private:
-
 
         xlibpp_display _display;
         Window _window;
