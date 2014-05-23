@@ -58,6 +58,11 @@ void XLibWindow::create()
     XMapWindow(_display.get(), wnd);
 }
 
+void XLibWindow::attach(pid_t pid)
+{
+
+}
+
 void XLibWindow::destroy()
 {
     assert(_display.get() != nullptr);

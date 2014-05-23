@@ -15,18 +15,35 @@ class XLibWindow : public IWindow
         XLibWindow(xlibpp_display &display);
         ~XLibWindow();
 
-        /* actions */
-        void minimize();
-        void maximize();
-        void raiseTop();
+        /* minimizes the window */
+         void minimize();
 
-        void iconfy();
-        void redraw();
-        void create();
-        void destroy();
+        /* maximizes the window */
+         void maximize();
 
-        void move(int x, int y);
-        void resize(int width , int height);
+        /* brings the window to the top of the stack */
+         void raiseTop();
+
+        /* iconfies the window */
+         void iconfy();
+
+        /* refreshes the screen */
+         void redraw();
+
+        /* creates a simple window */
+         void create();
+
+        /* attaches an existing window in this an instance of this class */
+         void attach(pid_t pid);
+
+        /* destroys the window */
+         void destroy();
+
+        /* moves the window */
+         void move(int x, int y);
+
+        /* resizes the window */
+         void resize(int width , int height);
 
         /* specific to Xlib implementation */
         void setDisplay(xlibpp_display display);
