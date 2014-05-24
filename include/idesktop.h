@@ -31,6 +31,9 @@ class IDesktop
         /* inits the root desktop window */
         virtual int initRootWindow(int screenNumber) = 0;
 
+        /* returns the number os screens found */
+        virtual int getNumberOfScreens()             = 0;
+
         /* draws the status bar on the top of the window */
         /* TODO: accept some configuration options here */
         virtual void setStatusBar()                   = 0;
@@ -45,11 +48,12 @@ class IDesktop
          * --------------- */
 
         /* sets the accel keys for programs launch and controlling */
-        void setKeyMaps(const std::vector<KeyMap>& keys) { _keyMap = keys; }
+        void setKeyMaps(const KeyMaps& keys) { _keyMaps = keys; }
 
-    private:
+    protected:
 
         KeyMaps _keyMaps;
+        whandler _window;
 };
 
 #endif

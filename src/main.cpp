@@ -1,4 +1,6 @@
 
+#include "types.h"
+#include "idesktop.h"
 #include "xlibpp.h"
 #include "helper.h"
 #include "keymap.h"
@@ -6,7 +8,8 @@
 #include <iostream>
 #include <string>
 
-std::vector<KeyMap> maps {
+/* TODO: accel keys should go to a config file */
+KeyMaps maps {
     KeyMap { XStringToKeysym("F1"), Mod1Mask, 0, "xterm" },
     KeyMap { XStringToKeysym("F2"), Mod1Mask, 0, "gnome-calculator" },
     KeyMap { XStringToKeysym("F3"), Mod1Mask, 0, "gnome-terminal" }
@@ -18,11 +21,11 @@ int main(int argc, char *argv[])
     {
         std::cout << m.getProgram() << std::endl;
     }
-    xlibpp xlib;
 
-    xlib.initRootWindow(0);
-    xlib.setMaps(maps);
-    xlib.loop();
+    std::unique_ptr<IDesktop> pDesktop(new XLibpp);
+    pDesktop->setKeyMaps(maps);
+    pDesktop->initRootWindow(0);
+    pDesktop->loop();
 
     /*using namespace std;
     string o, e;

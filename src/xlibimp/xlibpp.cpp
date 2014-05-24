@@ -15,53 +15,53 @@
 
 using namespace std;
 
-xlibpp::xlibpp() :
+XLibpp::XLibpp() :
     _display { XOpenDisplay(0x0), &XCloseDisplay }
 {
     std::cout << "constructing...\n";
 }
 
-int xlibpp::width(int screenNumber)
+int XLibpp::width(int screenNumber)
 {
     assert(_display.get() != nullptr);
-    assert(screenNumber >= 0 && screenNumber < this->numberOfScreens());
+    assert(screenNumber >= 0 && screenNumber < this->getNumberOfScreens());
 
     return DisplayWidth(_display.get(), screenNumber);
 }
 
-int xlibpp::height(int screenNumber)
+int XLibpp::height(int screenNumber)
 {
     assert(_display.get() != nullptr);
-    assert(screenNumber >= 0 && screenNumber < this->numberOfScreens());
+    assert(screenNumber >= 0 && screenNumber < this->getNumberOfScreens());
 
     return DisplayHeight(_display.get(), screenNumber);
 }
 
-int xlibpp::depth(int screenNumber)
+int XLibpp::depth(int screenNumber)
 {
     assert(_display.get() != nullptr);
-    assert(screenNumber >= 0 && screenNumber < this->numberOfScreens());
+    assert(screenNumber >= 0 && screenNumber < this->getNumberOfScreens());
 
     return DefaultDepth(_display.get(), screenNumber);
 }
 
-int xlibpp::numberOfScreens()
+int XLibpp::getNumberOfScreens()
 {
     assert(_display.get() != nullptr);
 
     return ScreenCount(_display.get());
 }
 
-int xlibpp::initRootWindow(int screenNumber)
+int XLibpp::initRootWindow(int screenNumber)
 {
     assert(_display.get() != nullptr);
-    assert(screenNumber >= 0 && screenNumber < this->numberOfScreens());
+    assert(screenNumber >= 0 && screenNumber < this->getNumberOfScreens());
 
     Cursor cursor, hand_cursor;
 
     // TODO: get the root window based on the screenNumber
     std::cout << "init root window...\n";
-    std::cout << "n of screens: " << numberOfScreens() << std::endl;
+    std::cout << "n of screens: " << getNumberOfScreens() << std::endl;
 
     cursor = XCreateFontCursor(_display.get(), XC_left_ptr);
     hand_cursor = XCreateFontCursor(_display.get(), XC_hand2);
@@ -69,13 +69,12 @@ int xlibpp::initRootWindow(int screenNumber)
     _window = DefaultRootWindow(_display.get());
     XDefineCursor(_display.get(), _window, cursor);
 
-    drawBar();
+    setStatusBar();
+    setAccelKeys();
 }
 
-void xlibpp::setMaps(const KeyMaps& keys)
+void XLibpp::setAccelKeys()
 {
-    _keyMaps = keys;
-
     XSelectInput(_display.get(), _window, SubstructureRedirectMask |
                                           SubstructureNotifyMask |
                                           ButtonPressMask |
@@ -97,7 +96,7 @@ void xlibpp::setMaps(const KeyMaps& keys)
     }
 }
 
-Window xlibpp::getWindowByPID(unsigned long pid)
+Window XLibpp::getWindowByPID(unsigned long pid)
 {
     Window root;
     Window parent;
@@ -121,7 +120,7 @@ Window xlibpp::getWindowByPID(unsigned long pid)
         windowStack.pop();
 
         // get the PID of a given window
-        /*XGetWindowProperty(_display.get(),
+        XGetWindowProperty(_display.get(),
                            lookupWnd,
                            XInternAtom(_display.get(), "_NET_WM_PID", True),
                            0,
@@ -143,7 +142,7 @@ Window xlibpp::getWindowByPID(unsigned long pid)
             return lookupWnd;
         }
 
-        XFree(pPid);*/
+        XFree(pPid);
 
         // search for all windows placed in the desktop
         status = XQueryTree(_display.get(),
@@ -165,7 +164,7 @@ Window xlibpp::getWindowByPID(unsigned long pid)
     }
 }
 
-void xlibpp::loop()
+void XLibpp::loop()
 {
     std::cout << "main loop...\n";
     XGrabButton(_display.get(), 1, Mod1Mask, DefaultRootWindow(_display.get()), True,
@@ -191,17 +190,6 @@ void xlibpp::loop()
                     k.getMod1() | k.getMod2() == event.xkey.state)
                 {
                     pid_t pid = helper::callProgramBg(k.getProgram().c_str());
-                    //Window wnd = getWindowByPID(pid);
-
-
-
-                        /*char *win_name = NULL;
-                        XFetchName(_display.get(), wnd, &win_name);
-                       //XResizeWindow(_display.get(), children[i], 50, 50);
-                        if (win_name == NULL)
-                            continue;
-                        std::cout << "child name: " << win_name << std::endl;*/
-                    
 
                     break;
                 }
@@ -269,7 +257,7 @@ void xlibpp::loop()
     }
 }
 
-void xlibpp::drawBar()
+void XLibpp::setStatusBar()
 {
     XLibWindow statusbar(_display);
     statusbar.x(0);

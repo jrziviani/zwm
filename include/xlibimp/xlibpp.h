@@ -2,6 +2,7 @@
 #define _XLIBPP_H
 
 #include "keymap.h"
+#include "idesktop.h"
 
 #include <memory>
 #include <vector>
@@ -9,30 +10,44 @@
        
 using xlibpp_display = std::unique_ptr<Display, decltype(&XCloseDisplay)>;
 
-class xlibpp
+class XLibpp : public IDesktop
 {
     public:
 
-        xlibpp();
+        XLibpp();
 
-        int width(int screenNumber);
-        int height(int screenNumber);
-        int depth(int screenNumber);
-        int numberOfScreens();
-
-        int initRootWindow(int screenNumber);
-        void setMaps(const KeyMaps& keys);
-        Window getWindowByPID(unsigned long pid);
-
+        /* main loop */
         void loop();
 
-        void drawBar();
+        /* returns the desktop width */
+        int width(int screenNumber);
+
+        /* returns the desktop height (considering the top bar) */
+        int height(int screenNumber);
+
+        /* returns the desktop depth resolution */
+        int depth(int screenNumber);
+
+        /* inits the root desktop window */
+        int initRootWindow(int screenNumber);
+
+        /* returns the number os screens found */
+        int getNumberOfScreens(); 
+
+        /* returns the window id given a process id */
+        whandler getWindowByPID(unsigned long pid);
+
+        /* draws the status bar on the top of the window */
+        void setStatusBar();
+
+    private:
+
+        /* configure the keymaps as real accel keys */
+        void setAccelKeys();
 
     private:
 
         xlibpp_display _display;
-        Window _window;
-        std::vector<KeyMap> _keyMaps;
 };
 
 #endif
