@@ -2,23 +2,27 @@
 #include "helper.h"
 #include "xlibwindow.h"
 
+#include <unordered_map>
 #include <algorithm>
-#include <cassert>
-#include <unistd.h>
-
+#include <stack>
 #include <iostream>
+#include <cassert>
 
+#include <unistd.h>
 #include <X11/cursorfont.h>
 #include <X11/Xatom.h>
-
-#include <stack>
+#include <X11/Xutil.h>
 
 using namespace std;
 
 XLibpp::XLibpp() :
     _display { XOpenDisplay(0x0), &XCloseDisplay }
 {
-    std::cout << "constructing...\n";
+    _handlers.insert(make_pair(MapRequest,    &XLibpp::mapRequest));
+    _handlers.insert(make_pair(KeyPress,      &XLibpp::keyPress));
+    _handlers.insert(make_pair(ButtonPress, &XLibpp::buttonPress));
+    _handlers.insert(make_pair(ButtonRelease, &XLibpp::buttonRelease));
+    _handlers.insert(make_pair(MotionNotify,  &XLibpp::motionNotify));
 }
 
 int XLibpp::width(int screenNumber)
@@ -69,12 +73,6 @@ int XLibpp::initRootWindow(int screenNumber)
     _window = DefaultRootWindow(_display.get());
     XDefineCursor(_display.get(), _window, cursor);
 
-    setStatusBar();
-    setAccelKeys();
-}
-
-void XLibpp::setAccelKeys()
-{
     XSelectInput(_display.get(), _window, SubstructureRedirectMask |
                                           SubstructureNotifyMask |
                                           ButtonPressMask |
@@ -84,6 +82,12 @@ void XLibpp::setAccelKeys()
                                           PropertyChangeMask |
                                           ExposureMask | 
                                           KeyPressMask);
+    setStatusBar();
+    setAccelKeys();
+}
+
+void XLibpp::setAccelKeys()
+{
     for (KeyMap k : _keyMaps)
     {
         XGrabKey(_display.get(),
@@ -173,87 +177,20 @@ void XLibpp::loop()
             ButtonPressMask|ButtonReleaseMask|PointerMotionMask, GrabModeAsync, GrabModeAsync, None, None);
 
     XEvent event;
-    XWindowAttributes attr;
-    XButtonEvent start;
+    //XWindowAttributes attr;
+    //XButtonEvent start;
 
-    start.subwindow = None;
+    //start.subwindow = None;
     while (true) {
 
         XNextEvent(_display.get(), &event);
 
+        // ignore the event if we don't have a mapped handler for it
+        if (_handlers.find(event.type) == _handlers.end())
+            continue;
 
-        if (event.type == KeyPress)
-        {
-            for (KeyMap k : _keyMaps)
-            {
-                if (XKeysymToKeycode(_display.get(), k.getKey()) == event.xkey.keycode &&
-                    k.getMod1() | k.getMod2() == event.xkey.state)
-                {
-                    pid_t pid = helper::callProgramBg(k.getProgram().c_str());
-
-                    break;
-                }
-
-            }
-        }
-        else if (event.type == CreateNotify)
-        {
-            std::cout << "CREATE\n";
-        }
-        else if (event.type == ButtonPress &&
-                event.xbutton.subwindow != None)
-        {
-            std::cout << "button press\n";
-            XRaiseWindow(_display.get(), event.xkey.subwindow);
-
-
-            XGetWindowAttributes(_display.get(), 
-                                 event.xbutton.subwindow, 
-                                 &attr);
-
-            //std::cout << "window: " << event.xbutton.subwindow << std::endl;
-            //XUnmapWindow(_display.get(), event.xbutton.subwindow);
-            start = event.xbutton;
-        }
-
-        else if (event.type == MotionNotify && 
-                start.subwindow != None)
-        {
-            //std::cout << "mouse move\n";
-            int xdiff = event.xbutton.x_root - start.x_root;
-            int ydiff = event.xbutton.y_root - start.y_root;
-            XMoveResizeWindow(_display.get(), start.subwindow,
-                attr.x + (start.button==1 ? xdiff : 0),
-                attr.y + (start.button==1 ? ydiff : 0),
-                std::max(1, attr.width + (start.button==3 ? xdiff : 0)),
-                std::max(1, attr.height + (start.button==3 ? ydiff : 0)));
-        }
-        else if(event.type == ButtonRelease)
-        {
-            //std::cout << "button release\n";
-            start.subwindow = None;
-        }
-        else if (event.type == MappingNotify)
-        {   std::cout << "event type: " << event.type << std::endl;
-            std::cout << "event request: " << event.xmapping.request << std::endl;
-            std::cout << "window: " << event.xmapping.window << std::endl;
-
-            //XUnmapWindow(_display.get(), event.xmapping.window);
-
-        }
-        else if (event.type == MapRequest)
-        {   std::cout << "event type: " << event.type << std::endl;
-            std::cout << "window: " << event.xmaprequest.window << std::endl;
-
-            XSetWindowBorderWidth(_display.get(), event.xmaprequest.window, 2);
-            XSetWindowBorder(_display.get(), event.xmaprequest.window, 0x00ff9944);
-            XMoveResizeWindow(_display.get(), event.xmaprequest.window, 0, 0, 800, 600);
-            //XRaiseWindow(_display.get(), event.xmaprequest.window);
-            XMapWindow(_display.get(), event.xmaprequest.window);
-
-        }
-        //std::cout << "event type [all]: " << event.type << std::endl;
-
+        // call the handler based on the event type received
+        (this->*_handlers[event.type])(event);
     }
 }
 
@@ -266,4 +203,74 @@ void XLibpp::setStatusBar()
     statusbar.height(height(0) / 50);
     statusbar.parent(_window);
     statusbar.create();
+}
+
+void XLibpp::mapRequest(XEvent &e)
+{
+    std::cout << "e type: " << e.type << std::endl;
+    std::cout << "window: " << e.xmaprequest.window << std::endl;
+    XTextProperty title;
+    XGetWMName(_display.get(), e.xmaprequest.window, &title);
+    std::cout << "window name: " << title.value << std::endl;
+    std::cout << "***************************************" << std::endl;
+
+    XLibWindow wnd(_display);
+    wnd.x(0);
+    wnd.y(50);
+    wnd.width(200);
+    wnd.width(200);
+    wnd.parent(e.xmaprequest.parent);
+    wnd.window(e.xmaprequest.window);
+
+    //XSetWindowBorderWidth(_display.get(), e.xmaprequest.window, 2);
+    //XSetWindowBorder(_display.get(), e.xmaprequest.window, 0x00ff9944);
+    XMoveResizeWindow(_display.get(), e.xmaprequest.window, 0, 0, 800, 600);
+    //XRaiseWindow(_display.get(), e.xmaprequest.window);
+    XMapWindow(_display.get(), e.xmaprequest.window);
+}
+
+void XLibpp::keyPress(XEvent &e)
+{
+    for (KeyMap k : _keyMaps)
+    {
+        if (XKeysymToKeycode(_display.get(), k.getKey()) == e.xkey.keycode &&
+            k.getMod1() | k.getMod2() == e.xkey.state)
+        {
+            helper::callProgramBg(k.getProgram().c_str());
+            break;
+        }
+
+    }
+}
+
+void XLibpp::buttonPress(XEvent &e)
+{
+    std::cout << "button press\n";
+    /*XRaiseWindow(_display.get(), e.xkey.subwindow);
+
+
+    XGetWindowAttributes(_display.get(), 
+                         e.xbutton.subwindow, 
+                         &attr);
+
+    //std::cout << "window: " << event.xbutton.subwindow << std::endl;
+    //XUnmapWindow(_display.get(), event.xbutton.subwindow);
+    start = e.xbutton;*/
+}
+
+void XLibpp::buttonRelease(XEvent &e)
+{
+    //start.subwindow = None;
+}
+
+void XLibpp::motionNotify(XEvent &e)
+{
+    //std::cout << "mouse move\n";
+    /*int xdiff = e.xbutton.x_root - start.x_root;
+    int ydiff = e.xbutton.y_root - start.y_root;
+    XMoveResizeWindow(_display.get(), start.subwindow,
+        attr.x + (start.button==1 ? xdiff : 0),
+        attr.y + (start.button==1 ? ydiff : 0),
+        std::max(1, attr.width + (start.button==3 ? xdiff : 0)),
+        std::max(1, attr.height + (start.button==3 ? ydiff : 0)));*/
 }
