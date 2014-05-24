@@ -11,14 +11,14 @@ init:
 	@-rm -fr build
 	@mkdir build
 
-main: keymap.o helper.o xlibpp.o xlibwindow.o
+main: keymap.o helper.o xlibdesktop.o xlibwindow.o
 	$(CC) $(CFLAGS) $(INCLUDE) src/main.cpp \
-		build/xlibpp.o build/helper.o build/keymap.o \
+		build/xlibdesktop.o build/helper.o build/keymap.o \
 		build/xlibwindow.o \
 		$(LIBS) -o main
 
-xlibpp.o: src/xlibimp/xlibpp.cpp include/xlibimp/xlibpp.h
-	$(CC) $(CFLAGS) $(INCLUDE) -c src/xlibimp/xlibpp.cpp -o build/xlibpp.o
+xlibdesktop.o: src/xlibimp/xlibdesktop.cpp include/xlibimp/xlibdesktop.h
+	$(CC) $(CFLAGS) $(INCLUDE) -c src/xlibimp/xlibdesktop.cpp -o build/xlibdesktop.o
 
 helper.o: src/helper.cpp include/helper.h
 	$(CC) $(CFLAGS) $(INCLUDE) -c src/helper.cpp -o build/helper.o

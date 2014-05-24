@@ -1,7 +1,7 @@
 
 #include "types.h"
 #include "idesktop.h"
-#include "xlibpp.h"
+#include "xlibdesktop.h"
 #include "helper.h"
 #include "keymap.h"
 
@@ -22,7 +22,8 @@ int main(int argc, char *argv[])
         std::cout << m.getProgram() << std::endl;
     }
 
-    std::unique_ptr<IDesktop> pDesktop(new XLibpp);
+    // TODO: implement a factory to create the real desktop
+    std::unique_ptr<IDesktop> pDesktop(new XLibDesktop);
     pDesktop->setKeyMaps(maps);
     pDesktop->initRootWindow(0);
     pDesktop->loop();

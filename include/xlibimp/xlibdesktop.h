@@ -1,5 +1,5 @@
-#ifndef _XLIBPP_H
-#define _XLIBPP_H
+#ifndef _XLIBDESKTOP_H
+#define _XLIBDESKTOP_H
 
 #include "keymap.h"
 #include "idesktop.h"
@@ -10,13 +10,14 @@
 
 #include <X11/Xlib.h>
        
-using xlibpp_display = std::unique_ptr<Display, decltype(&XCloseDisplay)>;
 
-class XLibpp : public IDesktop
+class XLibDesktop : public IDesktop
 {
+    using xlibpp_display = std::unique_ptr<Display, decltype(&XCloseDisplay)>;
+
     public:
 
-        XLibpp();
+        XLibDesktop();
 
         /* main loop */
         void loop();
@@ -59,9 +60,10 @@ class XLibpp : public IDesktop
 
     private:
 
-        typedef void (XLibpp::*handler)(XEvent &);
+        typedef void (XLibDesktop::*handler)(XEvent &);
 
         xlibpp_display _display;
+
         std::unordered_map <int, handler> _handlers;
 };
 

@@ -2,7 +2,9 @@
 #define _XLIBWINDOW_H
 
 #include "iwindow.h"
-#include "xlibpp.h"
+
+#include <memory>
+#include <X11/Xlib.h>
 
 /* XLibWindow
  *
@@ -10,6 +12,8 @@
  */ 
 class XLibWindow : public IWindow
 {
+    using xlibpp_display = std::unique_ptr<Display, decltype(&XCloseDisplay)>;
+
     public:
 
         XLibWindow(xlibpp_display &display);

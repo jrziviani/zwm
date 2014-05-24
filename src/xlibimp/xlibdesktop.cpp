@@ -1,4 +1,4 @@
-#include "xlibpp.h"
+#include "xlibdesktop.h"
 #include "helper.h"
 #include "xlibwindow.h"
 
@@ -15,17 +15,17 @@
 
 using namespace std;
 
-XLibpp::XLibpp() :
+XLibDesktop::XLibDesktop() :
     _display { XOpenDisplay(0x0), &XCloseDisplay }
 {
-    _handlers.insert(make_pair(MapRequest,    &XLibpp::mapRequest));
-    _handlers.insert(make_pair(KeyPress,      &XLibpp::keyPress));
-    _handlers.insert(make_pair(ButtonPress, &XLibpp::buttonPress));
-    _handlers.insert(make_pair(ButtonRelease, &XLibpp::buttonRelease));
-    _handlers.insert(make_pair(MotionNotify,  &XLibpp::motionNotify));
+    _handlers.insert(make_pair(MapRequest,    &XLibDesktop::mapRequest));
+    _handlers.insert(make_pair(KeyPress,      &XLibDesktop::keyPress));
+    _handlers.insert(make_pair(ButtonPress,   &XLibDesktop::buttonPress));
+    _handlers.insert(make_pair(ButtonRelease, &XLibDesktop::buttonRelease));
+    _handlers.insert(make_pair(MotionNotify,  &XLibDesktop::motionNotify));
 }
 
-int XLibpp::width(int screenNumber)
+int XLibDesktop::width(int screenNumber)
 {
     assert(_display.get() != nullptr);
     assert(screenNumber >= 0 && screenNumber < this->getNumberOfScreens());
@@ -33,7 +33,7 @@ int XLibpp::width(int screenNumber)
     return DisplayWidth(_display.get(), screenNumber);
 }
 
-int XLibpp::height(int screenNumber)
+int XLibDesktop::height(int screenNumber)
 {
     assert(_display.get() != nullptr);
     assert(screenNumber >= 0 && screenNumber < this->getNumberOfScreens());
@@ -41,7 +41,7 @@ int XLibpp::height(int screenNumber)
     return DisplayHeight(_display.get(), screenNumber);
 }
 
-int XLibpp::depth(int screenNumber)
+int XLibDesktop::depth(int screenNumber)
 {
     assert(_display.get() != nullptr);
     assert(screenNumber >= 0 && screenNumber < this->getNumberOfScreens());
@@ -49,14 +49,14 @@ int XLibpp::depth(int screenNumber)
     return DefaultDepth(_display.get(), screenNumber);
 }
 
-int XLibpp::getNumberOfScreens()
+int XLibDesktop::getNumberOfScreens()
 {
     assert(_display.get() != nullptr);
 
     return ScreenCount(_display.get());
 }
 
-int XLibpp::initRootWindow(int screenNumber)
+int XLibDesktop::initRootWindow(int screenNumber)
 {
     assert(_display.get() != nullptr);
     assert(screenNumber >= 0 && screenNumber < this->getNumberOfScreens());
@@ -86,7 +86,7 @@ int XLibpp::initRootWindow(int screenNumber)
     setAccelKeys();
 }
 
-void XLibpp::setAccelKeys()
+void XLibDesktop::setAccelKeys()
 {
     for (KeyMap k : _keyMaps)
     {
@@ -100,7 +100,7 @@ void XLibpp::setAccelKeys()
     }
 }
 
-Window XLibpp::getWindowByPID(unsigned long pid)
+Window XLibDesktop::getWindowByPID(unsigned long pid)
 {
     Window root;
     Window parent;
@@ -168,7 +168,7 @@ Window XLibpp::getWindowByPID(unsigned long pid)
     }
 }
 
-void XLibpp::loop()
+void XLibDesktop::loop()
 {
     std::cout << "main loop...\n";
     XGrabButton(_display.get(), 1, Mod1Mask, DefaultRootWindow(_display.get()), True,
@@ -194,7 +194,7 @@ void XLibpp::loop()
     }
 }
 
-void XLibpp::setStatusBar()
+void XLibDesktop::setStatusBar()
 {
     XLibWindow statusbar(_display);
     statusbar.x(0);
@@ -205,7 +205,7 @@ void XLibpp::setStatusBar()
     statusbar.create();
 }
 
-void XLibpp::mapRequest(XEvent &e)
+void XLibDesktop::mapRequest(XEvent &e)
 {
     std::cout << "e type: " << e.type << std::endl;
     std::cout << "window: " << e.xmaprequest.window << std::endl;
@@ -229,7 +229,7 @@ void XLibpp::mapRequest(XEvent &e)
     XMapWindow(_display.get(), e.xmaprequest.window);
 }
 
-void XLibpp::keyPress(XEvent &e)
+void XLibDesktop::keyPress(XEvent &e)
 {
     for (KeyMap k : _keyMaps)
     {
@@ -243,7 +243,7 @@ void XLibpp::keyPress(XEvent &e)
     }
 }
 
-void XLibpp::buttonPress(XEvent &e)
+void XLibDesktop::buttonPress(XEvent &e)
 {
     std::cout << "button press\n";
     /*XRaiseWindow(_display.get(), e.xkey.subwindow);
@@ -258,12 +258,12 @@ void XLibpp::buttonPress(XEvent &e)
     start = e.xbutton;*/
 }
 
-void XLibpp::buttonRelease(XEvent &e)
+void XLibDesktop::buttonRelease(XEvent &e)
 {
     //start.subwindow = None;
 }
 
-void XLibpp::motionNotify(XEvent &e)
+void XLibDesktop::motionNotify(XEvent &e)
 {
     //std::cout << "mouse move\n";
     /*int xdiff = e.xbutton.x_root - start.x_root;
