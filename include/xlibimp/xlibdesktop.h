@@ -70,6 +70,8 @@ class XLibDesktop : public IDesktop
         void buttonPress(XEvent &e  , args_t &arg);
         void buttonRelease(XEvent &e, args_t &arg);
         void motionNotify(XEvent &e , args_t &arg);
+        void mapNotify(XEvent &e    , args_t &arg);
+        void enterNotify(XEvent &e  , args_t &arg);
 
     private:
 
@@ -78,6 +80,8 @@ class XLibDesktop : public IDesktop
 
         // Event handlers maps.
         std::unordered_map <int, handler> _handlers;
+
+        XLibWindow _statusBar;
 };
 
 #endif

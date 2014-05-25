@@ -64,6 +64,10 @@ class IWindow
 
         // Resizes the window.
         virtual void resize(int width , int height) = 0;
+
+        /* sets the status title */
+        /* TODO: this should possible be moved to a plugin */
+        virtual void setStatusTitle(std::string status) = 0;
         
         //
         // GENERIC CODE

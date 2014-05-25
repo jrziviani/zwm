@@ -64,6 +64,9 @@ class XLibWindow : public IWindow
         // TODO: remove this method setDisplay.
         void setDisplay(xlibpp_display display);
 
+        /*  */
+        void setStatusTitle(std::string status);
+
     private:
 
         // Sets the window non copyable and non moveable (std::move).

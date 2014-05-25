@@ -15,14 +15,18 @@
 using namespace std;
 
 XLibDesktop::XLibDesktop(logger &logger) :
-    IDesktop(logger),
-    _display { XOpenDisplay(0x0), &XCloseDisplay }
+    IDesktop   (logger),
+    _display   { XOpenDisplay(0x0), &XCloseDisplay },
+    _statusBar (_display)
 {
     _handlers.insert(make_pair(MapRequest,    &XLibDesktop::mapRequest));
     _handlers.insert(make_pair(KeyPress,      &XLibDesktop::keyPress));
     _handlers.insert(make_pair(ButtonPress,   &XLibDesktop::buttonPress));
     _handlers.insert(make_pair(ButtonRelease, &XLibDesktop::buttonRelease));
     _handlers.insert(make_pair(MotionNotify,  &XLibDesktop::motionNotify));
+    _handlers.insert(make_pair(MapNotify,     &XLibDesktop::mapNotify));
+    _handlers.insert(make_pair(LeaveNotify,   &XLibDesktop::enterNotify));
+    _handlers.insert(make_pair(EnterNotify,   &XLibDesktop::enterNotify));
 }
 
 int XLibDesktop::width(int screenNumber)
@@ -73,6 +77,8 @@ void XLibDesktop::initRootWindow(int screenNumber)
     XDefineCursor(_display.get(), _window, cursor);
 
     XSelectInput(_display.get(), _window, SubstructureRedirectMask |
+                                          FocusChangeMask |
+                                          VisibilityChangeMask |
                                           SubstructureNotifyMask |
                                           ButtonPressMask |
                                           EnterWindowMask |
@@ -201,6 +207,8 @@ void XLibDesktop::loop()
 
         XNextEvent(_display.get(), &event);
 
+        INFO(_logger, "ziviani: " << event.type);
+
         // ignore the event if we don't have a mapped handler for it
         if (_handlers.find(event.type) == _handlers.end())
             continue;
@@ -212,13 +220,12 @@ void XLibDesktop::loop()
 
 void XLibDesktop::setStatusBar()
 {
-    XLibWindow statusbar(_display);
-    statusbar.x(0);
-    statusbar.y(0);
-    statusbar.width(width(0) - 1);
-    statusbar.height(height(0) / 50);
-    statusbar.parent(_window);
-    statusbar.create();
+    _statusBar.x(0);
+    _statusBar.y(0);
+    _statusBar.width(width(0) - 1);
+    _statusBar.height(height(0) / 50);
+    _statusBar.parent(_window);
+    _statusBar.create();
 }
 
 void XLibDesktop::mapRequest(XEvent &e, args_t &arg)
@@ -229,6 +236,7 @@ void XLibDesktop::mapRequest(XEvent &e, args_t &arg)
     XTextProperty title;
     XGetWMName(_display.get(), e.xmaprequest.window, &title);
     DEBUG(_logger, title.value);
+    XFree((char*)(title.value));
 
     XLibWindow wnd(_display);
     std::unique_ptr<XLibWindow> pWindow(new XLibWindow(_display));
@@ -239,6 +247,7 @@ void XLibDesktop::mapRequest(XEvent &e, args_t &arg)
     pWindow->parent(e.xmaprequest.parent);
     pWindow->window(e.xmaprequest.window);
     pWindow->redraw();
+    
     _children.insert(make_pair(e.xmaprequest.window, std::move(pWindow)));
 }
 
@@ -262,9 +271,14 @@ void XLibDesktop::buttonPress(XEvent &e, args_t &arg)
 {
     DEBUG(_logger, "Handling button press event");
 
-    if (e.xbutton.subwindow == _window ||
-        e.xbutton.subwindow == None)
+    // only handle registered windows
+    if (_children.find(e.xbutton.subwindow) == _children.end())
+    {
+        ERROR(_logger, "Window " 
+                      << e.xbutton.subwindow
+                      << " can't be changed");
         return;
+    }
 
     XRaiseWindow(_display.get(), e.xbutton.subwindow);
 
@@ -291,6 +305,7 @@ void XLibDesktop::buttonPress(XEvent &e, args_t &arg)
     arg.windowPosition.h = _children[arg.windowid]->height();
     arg.buttonPosition.x = e.xbutton.x_root;
     arg.buttonPosition.y = e.xbutton.y_root;
+    DEBUG(_logger, "exit button press");
 }
 
 void XLibDesktop::buttonRelease(XEvent &e, args_t &arg)
@@ -299,6 +314,59 @@ void XLibDesktop::buttonRelease(XEvent &e, args_t &arg)
     DEBUG(_logger, "Event type: " << e.type);
     DEBUG(_logger, "Window ID: " << e.xbutton.window);
     arg.buttonPressed = button_t::NONE;
+}
+
+void XLibDesktop::enterNotify(XEvent &e, args_t &arg)
+{
+    DEBUG(_logger, "Handling (focus)enter notify event: " << e.xcrossing.root);
+    DEBUG(_logger, "Handling (focus)enter notify event: " << e.xcrossing.window);
+    DEBUG(_logger, "Handling (focus)enter notify event: " << e.xcrossing.subwindow);
+
+    if (e.xcrossing.window == None)
+    {
+        ERROR(_logger, "window none");
+        return;
+    }
+    XTextProperty title;
+    XGetWMName(_display.get(), e.xcrossing.window, &title);
+
+/*    if (e.xfocus.window == None)
+    {
+        ERROR(_logger, "focus window none");
+        return;
+    }
+    XTextProperty title;
+    XGetWMName(_display.get(), e.xfocus.window, &title);*/
+
+    if (!title.value)
+    {
+        _statusBar.setStatusTitle("No focus...");
+        return;
+    }
+
+    std::string tmp((char*) title.value);
+    INFO(_logger, tmp);
+    _statusBar.setStatusTitle(tmp);
+    XFree((char*)(title.value));
+
+}
+
+void XLibDesktop::mapNotify(XEvent &e, args_t &arg)
+{
+    DEBUG(_logger, "Handling map notify event");
+    XTextProperty title;
+    XGetWMName(_display.get(), e.xmap.window, &title);
+
+    if (!title.value)
+    {
+        _statusBar.setStatusTitle("No window opened...");
+        return;
+    }
+
+    std::string tmp((char*) title.value);
+    INFO(_logger, tmp);
+    _statusBar.setStatusTitle(tmp);
+    XFree((char*)(title.value));
 }
 
 void XLibDesktop::motionNotify(XEvent &e, args_t &arg)
