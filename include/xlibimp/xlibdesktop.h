@@ -3,13 +3,13 @@
 
 #include "keymap.h"
 #include "idesktop.h"
+#include "xlibwindow.h"
 
 #include <memory>
 #include <vector>
 #include <unordered_map>
 
 #include <X11/Xlib.h>
-       
 
 class XLibDesktop : public IDesktop
 {
@@ -35,7 +35,7 @@ class XLibDesktop : public IDesktop
         int initRootWindow(int screenNumber);
 
         /* returns the number os screens found */
-        int getNumberOfScreens(); 
+        int getNumberOfScreens();
 
         /* returns the window id given a process id */
         /* TODO: remove this method that simply doesn't work, there is
@@ -52,15 +52,15 @@ class XLibDesktop : public IDesktop
         void setAccelKeys();
 
         /* event handlers */
-        void mapRequest(XEvent &e);
-        void keyPress(XEvent &e);
-        void buttonPress(XEvent &e);
-        void buttonRelease(XEvent &e);
-        void motionNotify(XEvent &e);
+        void mapRequest(XEvent &e   , args_t &arg);
+        void keyPress(XEvent &e     , args_t &arg);
+        void buttonPress(XEvent &e  , args_t &arg);
+        void buttonRelease(XEvent &e, args_t &arg);
+        void motionNotify(XEvent &e , args_t &arg);
 
     private:
 
-        typedef void (XLibDesktop::*handler)(XEvent &);
+        typedef void (XLibDesktop::*handler)(XEvent &, args_t &);
 
         xlibpp_display _display;
 

@@ -1,6 +1,5 @@
 #include "xlibdesktop.h"
 #include "helper.h"
-#include "xlibwindow.h"
 
 #include <unordered_map>
 #include <algorithm>
@@ -80,8 +79,30 @@ int XLibDesktop::initRootWindow(int screenNumber)
                                           LeaveWindowMask |
                                           StructureNotifyMask |
                                           PropertyChangeMask |
-                                          ExposureMask | 
+                                          ExposureMask |
                                           KeyPressMask);
+    XGrabButton(_display.get(),
+                1,
+                Mod1Mask,
+                DefaultRootWindow(_display.get()),
+                True,
+                ButtonPressMask|ButtonReleaseMask|PointerMotionMask,
+                GrabModeAsync,
+                GrabModeAsync,
+                None,
+                None);
+
+    XGrabButton(_display.get(),
+                3,
+                Mod1Mask,
+                DefaultRootWindow(_display.get()),
+                True,
+                ButtonPressMask|ButtonReleaseMask|PointerMotionMask,
+                GrabModeAsync,
+                GrabModeAsync,
+                None,
+                None);
+
     setStatusBar();
     setAccelKeys();
 }
@@ -171,16 +192,11 @@ Window XLibDesktop::getWindowByPID(unsigned long pid)
 void XLibDesktop::loop()
 {
     std::cout << "main loop...\n";
-    XGrabButton(_display.get(), 1, Mod1Mask, DefaultRootWindow(_display.get()), True,
-            ButtonPressMask|ButtonReleaseMask|PointerMotionMask, GrabModeAsync, GrabModeAsync, None, None);
-    XGrabButton(_display.get(), 3, Mod1Mask, DefaultRootWindow(_display.get()), True,
-            ButtonPressMask|ButtonReleaseMask|PointerMotionMask, GrabModeAsync, GrabModeAsync, None, None);
-
     XEvent event;
-    //XWindowAttributes attr;
-    //XButtonEvent start;
 
-    //start.subwindow = None;
+    args_t args;
+    args.buttonPressed = button_t::NONE;
+
     while (true) {
 
         XNextEvent(_display.get(), &event);
@@ -190,7 +206,7 @@ void XLibDesktop::loop()
             continue;
 
         // call the handler based on the event type received
-        (this->*_handlers[event.type])(event);
+        (this->*_handlers[event.type])(event, args);
     }
 }
 
@@ -205,7 +221,7 @@ void XLibDesktop::setStatusBar()
     statusbar.create();
 }
 
-void XLibDesktop::mapRequest(XEvent &e)
+void XLibDesktop::mapRequest(XEvent &e, args_t &arg)
 {
     std::cout << "e type: " << e.type << std::endl;
     std::cout << "window: " << e.xmaprequest.window << std::endl;
@@ -215,21 +231,18 @@ void XLibDesktop::mapRequest(XEvent &e)
     std::cout << "***************************************" << std::endl;
 
     XLibWindow wnd(_display);
-    wnd.x(0);
-    wnd.y(50);
-    wnd.width(200);
-    wnd.width(200);
-    wnd.parent(e.xmaprequest.parent);
-    wnd.window(e.xmaprequest.window);
-
-    //XSetWindowBorderWidth(_display.get(), e.xmaprequest.window, 2);
-    //XSetWindowBorder(_display.get(), e.xmaprequest.window, 0x00ff9944);
-    XMoveResizeWindow(_display.get(), e.xmaprequest.window, 0, 0, 800, 600);
-    //XRaiseWindow(_display.get(), e.xmaprequest.window);
-    XMapWindow(_display.get(), e.xmaprequest.window);
+    std::unique_ptr<XLibWindow> pWindow(new XLibWindow(_display));
+    pWindow->x(0);
+    pWindow->y(50);
+    pWindow->width(200);
+    pWindow->height(200);
+    pWindow->parent(e.xmaprequest.parent);
+    pWindow->window(e.xmaprequest.window);
+    pWindow->redraw();
+    _children.insert(make_pair(e.xmaprequest.window, std::move(pWindow)));
 }
 
-void XLibDesktop::keyPress(XEvent &e)
+void XLibDesktop::keyPress(XEvent &e, args_t &arg)
 {
     for (KeyMap k : _keyMaps)
     {
@@ -239,38 +252,69 @@ void XLibDesktop::keyPress(XEvent &e)
             helper::callProgramBg(k.getProgram().c_str());
             break;
         }
-
     }
 }
 
-void XLibDesktop::buttonPress(XEvent &e)
+void XLibDesktop::buttonPress(XEvent &e, args_t &arg)
 {
     std::cout << "button press\n";
-    /*XRaiseWindow(_display.get(), e.xkey.subwindow);
 
+    if (e.xbutton.subwindow == _window ||
+        e.xbutton.subwindow == None)
+        return;
 
-    XGetWindowAttributes(_display.get(), 
-                         e.xbutton.subwindow, 
-                         &attr);
+    XRaiseWindow(_display.get(), e.xbutton.subwindow);
 
-    //std::cout << "window: " << event.xbutton.subwindow << std::endl;
-    //XUnmapWindow(_display.get(), event.xbutton.subwindow);
-    start = e.xbutton;*/
+    switch (e.xbutton.button)
+    {
+        case 1:
+            arg.buttonPressed = button_t::LEFT;
+            break;
+
+        case 2:
+            break;
+
+        case 3:
+            arg.buttonPressed = button_t::RIGHT;
+            break;
+    }
+
+    arg.windowid         = e.xbutton.subwindow;
+    arg.windowPosition.x = _children[arg.windowid]->x();
+    arg.windowPosition.y = _children[arg.windowid]->y();
+    arg.windowPosition.w = _children[arg.windowid]->width();
+    arg.windowPosition.h = _children[arg.windowid]->height();
+    arg.buttonPosition.x = e.xbutton.x_root;
+    arg.buttonPosition.y = e.xbutton.y_root;
 }
 
-void XLibDesktop::buttonRelease(XEvent &e)
+void XLibDesktop::buttonRelease(XEvent &e, args_t &arg)
 {
-    //start.subwindow = None;
+    arg.buttonPressed = button_t::NONE;
 }
 
-void XLibDesktop::motionNotify(XEvent &e)
+void XLibDesktop::motionNotify(XEvent &e, args_t &arg)
 {
+    // get only the last move event, discarding the avalanche
+    while(XCheckTypedEvent(_display.get(), MotionNotify, &e));
+
+    if (arg.buttonPressed == button_t::NONE)
+        return;
+
+    assert(_children.find(arg.windowid) != _children.end());
+
     //std::cout << "mouse move\n";
-    /*int xdiff = e.xbutton.x_root - start.x_root;
-    int ydiff = e.xbutton.y_root - start.y_root;
-    XMoveResizeWindow(_display.get(), start.subwindow,
-        attr.x + (start.button==1 ? xdiff : 0),
-        attr.y + (start.button==1 ? ydiff : 0),
-        std::max(1, attr.width + (start.button==3 ? xdiff : 0)),
-        std::max(1, attr.height + (start.button==3 ? ydiff : 0)));*/
+    IWindow &rWindow = *_children[arg.windowid];
+
+    int xdiff = e.xbutton.x_root - arg.buttonPosition.x;
+    int ydiff = e.xbutton.y_root - arg.buttonPosition.y;
+
+    if (arg.buttonPressed == button_t::LEFT)
+    {
+        rWindow.move(arg.windowPosition.x + xdiff,
+                     arg.windowPosition.y + ydiff);
+    }
+    else if (arg.buttonPressed == button_t::RIGHT)
+        rWindow.resize(arg.windowPosition.w + xdiff,
+                       arg.windowPosition.h + ydiff);
 }

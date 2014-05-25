@@ -3,12 +3,40 @@
 
 #include "types.h"
 #include "keymap.h"
+#include "iwindow.h"
 
 #include <memory>
 #include <vector>
+#include <unordered_map>
        
 class IDesktop
 {
+    protected:
+
+        struct position_t
+        {
+            int x;
+            int y;
+            int w;
+            int h;
+        };
+
+        enum button_t
+        {
+            NONE,
+            LEFT,
+            MIDDLE,
+            RIGHT
+        };
+
+        struct args_t
+        {
+            button_t   buttonPressed;
+            position_t buttonPosition;
+            position_t windowPosition;
+            whandler   windowid;
+        };
+
     public:
         virtual ~IDesktop() {}
 
@@ -54,6 +82,7 @@ class IDesktop
 
         KeyMaps _keyMaps;
         whandler _window;
+        std::unordered_map <whandler, std::unique_ptr<IWindow>> _children;
 };
 
 #endif

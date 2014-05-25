@@ -38,6 +38,7 @@ void XLibWindow::redraw()
     assert(_display.get() != nullptr);
 
     move(x(), y());
+    resize(width(), height());
     XMapWindow(_display.get(), window());
 }
 
@@ -74,6 +75,9 @@ void XLibWindow::move(int x, int y)
 {
     assert(_display.get() != nullptr);
 
+    this->x(x);
+    this->y(y);
+
     XMoveResizeWindow(_display.get(), 
                       window(),
                       x,
@@ -85,6 +89,9 @@ void XLibWindow::move(int x, int y)
 void XLibWindow::resize(int width, int height)
 {
     assert(_display.get() != nullptr);
+
+    this->width(width);
+    this->height(height);
 
     XMoveResizeWindow(_display.get(), 
                       window(),
