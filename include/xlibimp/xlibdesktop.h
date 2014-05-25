@@ -17,7 +17,7 @@ class XLibDesktop : public IDesktop
 
     public:
 
-        XLibDesktop();
+        XLibDesktop(logger &logger);
 
         /* main loop */
         void loop();

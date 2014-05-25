@@ -14,7 +14,8 @@
 
 using namespace std;
 
-XLibDesktop::XLibDesktop() :
+XLibDesktop::XLibDesktop(logger &logger) :
+    IDesktop(logger),
     _display { XOpenDisplay(0x0), &XCloseDisplay }
 {
     _handlers.insert(make_pair(MapRequest,    &XLibDesktop::mapRequest));
@@ -63,8 +64,7 @@ int XLibDesktop::initRootWindow(int screenNumber)
     Cursor cursor, hand_cursor;
 
     // TODO: get the root window based on the screenNumber
-    std::cout << "init root window...\n";
-    std::cout << "n of screens: " << getNumberOfScreens() << std::endl;
+    DEBUG(_logger, "Number of screens: " << getNumberOfScreens());
 
     cursor = XCreateFontCursor(_display.get(), XC_left_ptr);
     hand_cursor = XCreateFontCursor(_display.get(), XC_hand2);
@@ -191,7 +191,7 @@ Window XLibDesktop::getWindowByPID(unsigned long pid)
 
 void XLibDesktop::loop()
 {
-    std::cout << "main loop...\n";
+    DEBUG(_logger, "Main loop");
     XEvent event;
 
     args_t args;
@@ -223,12 +223,12 @@ void XLibDesktop::setStatusBar()
 
 void XLibDesktop::mapRequest(XEvent &e, args_t &arg)
 {
-    std::cout << "e type: " << e.type << std::endl;
-    std::cout << "window: " << e.xmaprequest.window << std::endl;
+    DEBUG(_logger, "Handling map request event");
+    DEBUG(_logger, "Event type: " << e.type);
+    DEBUG(_logger, "Window ID: " << e.xmaprequest.window);
     XTextProperty title;
     XGetWMName(_display.get(), e.xmaprequest.window, &title);
-    std::cout << "window name: " << title.value << std::endl;
-    std::cout << "***************************************" << std::endl;
+    DEBUG(_logger, title.value);
 
     XLibWindow wnd(_display);
     std::unique_ptr<XLibWindow> pWindow(new XLibWindow(_display));
@@ -244,11 +244,14 @@ void XLibDesktop::mapRequest(XEvent &e, args_t &arg)
 
 void XLibDesktop::keyPress(XEvent &e, args_t &arg)
 {
+    DEBUG(_logger, "Handling key press event");
+
     for (KeyMap k : _keyMaps)
     {
         if (XKeysymToKeycode(_display.get(), k.getKey()) == e.xkey.keycode &&
             k.getMod1() | k.getMod2() == e.xkey.state)
         {
+            INFO(_logger, "Starting program " << k.getProgram());
             helper::callProgramBg(k.getProgram().c_str());
             break;
         }
@@ -257,7 +260,7 @@ void XLibDesktop::keyPress(XEvent &e, args_t &arg)
 
 void XLibDesktop::buttonPress(XEvent &e, args_t &arg)
 {
-    std::cout << "button press\n";
+    DEBUG(_logger, "Handling button press event");
 
     if (e.xbutton.subwindow == _window ||
         e.xbutton.subwindow == None)
@@ -269,6 +272,7 @@ void XLibDesktop::buttonPress(XEvent &e, args_t &arg)
     {
         case 1:
             arg.buttonPressed = button_t::LEFT;
+            DEBUG(_logger, "LEFT button pressed");
             break;
 
         case 2:
@@ -276,6 +280,7 @@ void XLibDesktop::buttonPress(XEvent &e, args_t &arg)
 
         case 3:
             arg.buttonPressed = button_t::RIGHT;
+            DEBUG(_logger, "RIGHT button pressed");
             break;
     }
 
@@ -290,6 +295,9 @@ void XLibDesktop::buttonPress(XEvent &e, args_t &arg)
 
 void XLibDesktop::buttonRelease(XEvent &e, args_t &arg)
 {
+    DEBUG(_logger, "Handling button release event");
+    DEBUG(_logger, "Event type: " << e.type);
+    DEBUG(_logger, "Window ID: " << e.xbutton.window);
     arg.buttonPressed = button_t::NONE;
 }
 
@@ -300,6 +308,8 @@ void XLibDesktop::motionNotify(XEvent &e, args_t &arg)
 
     if (arg.buttonPressed == button_t::NONE)
         return;
+
+    DEBUG(_logger, "Handling motion event");
 
     assert(_children.find(arg.windowid) != _children.end());
 
@@ -313,8 +323,24 @@ void XLibDesktop::motionNotify(XEvent &e, args_t &arg)
     {
         rWindow.move(arg.windowPosition.x + xdiff,
                      arg.windowPosition.y + ydiff);
+
+        DEBUG(_logger, "Wnd: " << arg.windowid
+                       << " - moved to ("
+                       << arg.windowPosition.x + xdiff
+                       << " x "
+                       << arg.buttonPosition.y + ydiff
+                       << ")");
     }
     else if (arg.buttonPressed == button_t::RIGHT)
+    {
         rWindow.resize(arg.windowPosition.w + xdiff,
                        arg.windowPosition.h + ydiff);
+
+        DEBUG(_logger, "Wnd: " << arg.windowid
+                       << " - resized ("
+                       << arg.windowPosition.x + xdiff
+                       << " x "
+                       << arg.buttonPosition.y + ydiff
+                       << ")");
+    }
 }

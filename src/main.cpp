@@ -1,5 +1,6 @@
 
 #include "types.h"
+#include "log.h"
 #include "idesktop.h"
 #include "xlibdesktop.h"
 #include "helper.h"
@@ -7,6 +8,7 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
 
 /* TODO: accel keys should go to a config file */
 KeyMaps maps {
@@ -17,13 +19,12 @@ KeyMaps maps {
 
 int main(int argc, char *argv[])
 {
-    for (KeyMap m : maps)
-    {
-        std::cout << m.getProgram() << std::endl;
-    }
+    // set logger
+    std::ofstream ofs ("build/zwm.log", std::ofstream::out);
+    logger myLog(ofs);
 
     // TODO: implement a factory to create the real desktop
-    std::unique_ptr<IDesktop> pDesktop(new XLibDesktop);
+    std::unique_ptr<IDesktop> pDesktop(new XLibDesktop(myLog));
     pDesktop->setKeyMaps(maps);
     pDesktop->initRootWindow(0);
     pDesktop->loop();

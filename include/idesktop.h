@@ -40,6 +40,9 @@ class IDesktop
     public:
         virtual ~IDesktop() {}
 
+        IDesktop(logger &logger) :
+            _logger(logger) {}
+
         /* ------------------
          * abstract code 
          * --------------- */
@@ -82,6 +85,7 @@ class IDesktop
 
         KeyMaps _keyMaps;
         whandler _window;
+        logger &_logger;
         std::unordered_map <whandler, std::unique_ptr<IWindow>> _children;
 };
 

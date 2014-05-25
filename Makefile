@@ -42,3 +42,7 @@ valgrind:
 	valgrind --tool=memcheck --leak-check=full  \
 		--track-origins=yes \
 		--show-reachable=yes xinit ./main -- :1
+
+todo:
+	find . -name \*.h -o -name \*.cpp -exec grep TODO {} + \
+		| sed "s/^\(.\+.[cpp|h]:\).*\(TODO.*\)$$/\1 \2/" > TODO.list

@@ -1,0 +1,6 @@
+./src/xlibimp/xlibwindow.cpp: TODO: configure border width
+./src/xlibimp/xlibwindow.cpp: TODO: configure border color
+./src/xlibimp/xlibwindow.cpp: TODO: configure bg color
+./src/xlibimp/xlibdesktop.cpp: TODO: get the root window based on the screenNumber
+./src/main.cpp: TODO: accel keys should go to a config file */
+./src/main.cpp: TODO: implement a factory to create the real desktop
