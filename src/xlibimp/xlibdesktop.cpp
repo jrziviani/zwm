@@ -56,7 +56,7 @@ int XLibDesktop::getNumberOfScreens()
     return ScreenCount(_display.get());
 }
 
-int XLibDesktop::initRootWindow(int screenNumber)
+void XLibDesktop::initRootWindow(int screenNumber)
 {
     assert(_display.get() != nullptr);
     assert(screenNumber >= 0 && screenNumber < this->getNumberOfScreens());

@@ -1,65 +1,78 @@
 #ifndef _XLIBWINDOW_H
 #define _XLIBWINDOW_H
 
+
+//
+// INCLUDES
+//
 #include "iwindow.h"
 
 #include <memory>
 #include <X11/Xlib.h>
 
-/* XLibWindow
- *
- * This class implements a window using the XLib API
- */ 
+
+//
+// DECLARATIONS
+//
+
+// Implements the IWindow interface by using XLib methods for X. Reference to
+// iwindow.h for details.
 class XLibWindow : public IWindow
 {
+    // C++11x - semantically the same as typedef however it's not a new type.
+    // XLib display alias definition with custom deallocator
     using xlibpp_display = std::unique_ptr<Display, decltype(&XCloseDisplay)>;
 
     public:
 
+        // Constructs a window using the same desktop display
+        // TODO: const ref?
         XLibWindow(xlibpp_display &display);
         ~XLibWindow();
 
-        /* minimizes the window */
-         void minimize();
+        // Minimizes a window.
+        void minimize();
 
-        /* maximizes the window */
-         void maximize();
+        // Maximizes a window.
+        void maximize();
 
-        /* brings the window to the top of the stack */
-         void raiseTop();
+        // Brings a window to the top of the stack.
+        void raiseTop();
 
-        /* iconfies the window */
-         void iconfy();
+        // Makes a window iconized.
+        void iconfy();
 
-        /* refreshes the screen */
-         void redraw();
+        // Refreshes the window.
+        void redraw();
 
-        /* creates a simple window */
-         void create();
+        // Creates a simple window.
+        void create();
 
-        /* attaches an existing window in this an instance of this class */
-         void attach(pid_t pid);
+        // Attaches an existing window in this an instance of this class.
+        void attach(pid_t pid);
 
-        /* destroys the window */
-         void destroy();
+        // Destroys the window.
+        void destroy();
 
-        /* moves the window */
-         void move(int x, int y);
+        // Moves the window.
+        void move(int x, int y);
 
-        /* resizes the window */
-         void resize(int width , int height);
+        // Resizes the window.
+        void resize(int width , int height);
 
-        /* specific to Xlib implementation */
+        // Sets the desktop display.
+        // TODO: remove this method setDisplay.
         void setDisplay(xlibpp_display display);
 
     private:
 
-        /* non copyable, non moveable */
+        // Sets the window non copyable and non moveable (std::move).
         XLibWindow(const XLibWindow&)              = delete;
         XLibWindow(XLibWindow&&)                   = delete;
         XLibWindow& operator=(const XLibWindow&) & = delete;
         XLibWindow& operator=(XLibWindow&&)      & = delete;
 
+        // References to desktop display.
         xlibpp_display &_display;
 };
 

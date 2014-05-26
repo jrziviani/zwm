@@ -1,101 +1,130 @@
 #ifndef _IWINDOW_H
 #define _IWINDOW_H
 
+
+//
+// INCLUDES
+//
 #include "types.h"
 
 #include <string>
 
-/* IWindow
- *
- * This class is an interface (abstract class to be accurate) to
- * represent an window in the desktop.
- */ 
+
+//
+// DECLARATIONS
+//
+
+// Defines an interface for a window specification. Everything related
+// to a window (properties and methods) should be declared here and
+// implemented in the specialized classes.
+//
+// An object window should be created in two forms:
+//  1) Defining its basic parameters (size, position) and calling
+//     create() method to create that window in the desktop;
+//  2) Attaching a window created somewhere else (i.e: terminal) by
+//     simply setting both its Window ID and its Parent ID in MapRequest
+//     event handler;
 class IWindow
 {
     public:
         virtual ~IWindow() {}
 
-        /* ------------------
-         * abstract code 
-         * --------------- */
+        //
+        // ABSTRACT CODE
+        //
 
-        /* minimizes the window */
+        // Minimizes a window.
         virtual void minimize()         = 0;
 
-        /* maximizes the window */
+        // Maximizes a window.
         virtual void maximize()         = 0;
 
-        /* brings the window to the top of the stack */
+        // Brings a window to the top of the stack.
         virtual void raiseTop()         = 0;
 
-        /* iconfies the window */
+        // Makes a window iconized.
         virtual void iconfy()           = 0;
 
-        /* refreshes the screen */
+        // Refreshes the window.
         virtual void redraw()           = 0;
 
-        /* creates a simple window */
-        /* TODO: give options for the window creation and improve
-         *       the document about this */
+        // Creates a simple window.
+        // TODO: this method should receive parameters to be customized.
         virtual void create()           = 0;
 
-        /* attaches an existing window in this an instance of this class */
+        // Attaches an existing window in this an instance of this class.
+        // TODO: remove attach(pid) - it won't be used.
         virtual void attach(pid_t pid)  = 0;
 
-        /* destroys the window */
+        // Destroys the window.
         virtual void destroy()          = 0;
 
-        /* moves the window */
+        // Moves the window.
         virtual void move(int x, int y) = 0;
 
-        /* resizes the window */
+        // Resizes the window.
         virtual void resize(int width , int height) = 0;
         
-        /* ------------------
-         * abstract code 
-         * --------------- */
+        //
+        // GENERIC CODE
+        //
 
-        /* returns window positions/sizes */
+        // Returns window's size/position.
         int x()             const { return _x; }
         int y()             const { return _y; }
         int width()         const { return _width; }
         int height()        const { return _height; }
 
-        /* returns window name/title */
+        // Returns window's name/title.
         std::string name()  const { return _name; }
         std::string title() const { return _title; }
 
-        /* returns window identifications */
+        // Returns window's identification.
         pid_t pid()         const { return _pid; }
         whandler window()   const { return _windowid; }
         whandler parent()   const { return _parentid; }
 
-        /* sets window positions/sizes */
+        // Sets window positions/sizes.
         void x(int pixels)           { _x = pixels; }
         void y(int pixels)           { _y = pixels; }
         void width(int pixels)       { _width = pixels; }
         void height(int pixels)      { _height = pixels; }
 
-        /* sets window name/title */
+        // Sets window name/title.
         void name(std::string name)  { _name = name; }
         void title(std::string name) { _name = name; }
 
-        /* sets window indentifications */
+        // Sets window indentifications.
         void pid(pid_t pid)          { _pid = pid; }
         void window(whandler wid)    { _windowid = wid; }
         void parent(whandler wid)    { _parentid = wid; }
 
     private:
+        // x coordinate (pixels).
         int _x;
+
+        // y coordinate (pixels).
         int _y;
+
+        // Window width (pixels).
         int _width;
+
+        // Window height (pixels).
         int _height;
 
+        // Process PID.
         pid_t _pid;
+
+        // Window ID.
         whandler _windowid;
+
+        // Parent window ID.
         whandler _parentid;
 
+        // Window name
         std::string _name;
+
+        // Window title
         std::string _title;
 };
 

@@ -1,6 +1,10 @@
 #ifndef _XLIBDESKTOP_H
 #define _XLIBDESKTOP_H
 
+
+//
+// INCLUDES
+//
 #include "keymap.h"
 #include "idesktop.h"
 #include "xlibwindow.h"
@@ -11,47 +15,56 @@
 
 #include <X11/Xlib.h>
 
+
+//
+// DECLARATIONS
+//
+
+// Implements the IDesktop interface using Xlib, reference to idesktop.h
+// for details.
 class XLibDesktop : public IDesktop
 {
+    // C++11x - semantically the same as typedef however it's not a new type.
+    // XLib display alias definition with custom deallocator
     using xlibpp_display = std::unique_ptr<Display, decltype(&XCloseDisplay)>;
+
+    // Event handler alias definition
+    using handler        = void (XLibDesktop::*)(XEvent &, args_t &);
 
     public:
 
         XLibDesktop(logger &logger);
 
-        /* main loop */
+        // Executes the main entry (event handler) of the desktop.
         void loop();
 
-        /* returns the desktop width */
+        // Returns the desktop width.
         int width(int screenNumber);
 
-        /* returns the desktop height (considering the top bar) */
+        // Returns the desktop height.
         int height(int screenNumber);
 
-        /* returns the desktop depth resolution */
+        // Returns the desktop depth.
         int depth(int screenNumber);
 
-        /* inits the root desktop window */
-        int initRootWindow(int screenNumber);
+        // Initializes the desktop.
+        void initRootWindow(int screenNumber);
 
-        /* returns the number os screens found */
+        // Returns the number of screens plugged.
         int getNumberOfScreens();
 
-        /* returns the window id given a process id */
-        /* TODO: remove this method that simply doesn't work, there is
-         *       no feasible way to get the window pid. All control must
-         *       be done using the window id */
+        // Returns the Window ID based on the Process ID.
         whandler getWindowByPID(unsigned long pid);
 
-        /* draws the status bar on the top of the window */
+        // Draws the status bar int the desktop top position.
         void setStatusBar();
 
     private:
 
-        /* configure the keymaps as real accel keys */
+        // Defines the accel keys in lib
         void setAccelKeys();
 
-        /* event handlers */
+        // Event handlers
         void mapRequest(XEvent &e   , args_t &arg);
         void keyPress(XEvent &e     , args_t &arg);
         void buttonPress(XEvent &e  , args_t &arg);
@@ -60,10 +73,10 @@ class XLibDesktop : public IDesktop
 
     private:
 
-        typedef void (XLibDesktop::*handler)(XEvent &, args_t &);
-
+        // XLib display instance.
         xlibpp_display _display;
 
+        // Event handlers maps.
         std::unordered_map <int, handler> _handlers;
 };
 
