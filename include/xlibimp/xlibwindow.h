@@ -42,11 +42,14 @@ class XLibWindow : public IWindow
         // Makes a window iconized.
         void iconfy();
 
+        // Initializes the graphic context
+        void initGraphic(int depth);
+
         // Refreshes the window.
         void redraw();
 
         // Creates a simple window.
-        void create();
+        void create(int depth);
 
         // Attaches an existing window in this an instance of this class.
         void attach(pid_t pid);
@@ -64,7 +67,7 @@ class XLibWindow : public IWindow
         // TODO: remove this method setDisplay.
         void setDisplay(xlibpp_display display);
 
-        /*  */
+        // Sets the status title
         void setStatusTitle(std::string status);
 
     private:
@@ -77,6 +80,9 @@ class XLibWindow : public IWindow
 
         // References to desktop display.
         xlibpp_display &_display;
+
+        // Pixmap ID
+        Pixmap _pixmap;
 };
 
 #endif

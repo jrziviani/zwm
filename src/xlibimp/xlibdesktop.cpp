@@ -207,8 +207,6 @@ void XLibDesktop::loop()
 
         XNextEvent(_display.get(), &event);
 
-        INFO(_logger, "ziviani: " << event.type);
-
         // ignore the event if we don't have a mapped handler for it
         if (_handlers.find(event.type) == _handlers.end())
             continue;
@@ -225,7 +223,7 @@ void XLibDesktop::setStatusBar()
     _statusBar.width(width(0) - 1);
     _statusBar.height(height(0) / 50);
     _statusBar.parent(_window);
-    _statusBar.create();
+    _statusBar.create(depth(0));
 }
 
 void XLibDesktop::mapRequest(XEvent &e, args_t &arg)
@@ -233,10 +231,6 @@ void XLibDesktop::mapRequest(XEvent &e, args_t &arg)
     DEBUG(_logger, "Handling map request event");
     DEBUG(_logger, "Event type: " << e.type);
     DEBUG(_logger, "Window ID: " << e.xmaprequest.window);
-    XTextProperty title;
-    XGetWMName(_display.get(), e.xmaprequest.window, &title);
-    DEBUG(_logger, title.value);
-    XFree((char*)(title.value));
 
     XLibWindow wnd(_display);
     std::unique_ptr<XLibWindow> pWindow(new XLibWindow(_display));
@@ -249,6 +243,7 @@ void XLibDesktop::mapRequest(XEvent &e, args_t &arg)
     pWindow->redraw();
     
     _children.insert(make_pair(e.xmaprequest.window, std::move(pWindow)));
+    DEBUG(_logger, "Exiting mapRequest..");
 }
 
 void XLibDesktop::keyPress(XEvent &e, args_t &arg)

@@ -1,16 +1,19 @@
 #include "xlibwindow.h"
 
 #include <cassert>
+#include <X11/Xft/Xft.h>
 
 XLibWindow::XLibWindow(xlibpp_display &display) :
-    _display(display)
+    _display(display),
+    _pixmap(None)
 {
 
 }
 
 XLibWindow::~XLibWindow()
 {
-
+    if (_pixmap != None)
+        XFreePixmap(_display.get(), _pixmap);
 }
 
 void XLibWindow::minimize()
@@ -43,7 +46,21 @@ void XLibWindow::redraw()
     XSelectInput(_display.get(), window(), EnterWindowMask);
 }
 
-void XLibWindow::create()
+void XLibWindow::initGraphic(int depth)
+{
+    assert(_display.get() != nullptr);
+
+    // create a pixmap with the same window size as
+    // a drawable for the graphic context
+    _pixmap = XCreatePixmap(_display.get(),
+                            window(),
+                            width(),
+                            height(),
+                            depth);
+    
+}
+
+void XLibWindow::create(int depth)
 {
     assert(_display.get() != nullptr);
 
@@ -58,6 +75,7 @@ void XLibWindow::create()
                                      BlackPixel(_display.get(), 0)); // TODO: configure bg color
     window(wnd);
     XMapWindow(_display.get(), wnd);
+    initGraphic(depth);
 }
 
 void XLibWindow::attach(pid_t pid)
@@ -106,41 +124,84 @@ void XLibWindow::setStatusTitle(std::string status)
 {
     assert(_display.get() != nullptr);
 
-    Pixmap pix = XCreatePixmap(_display.get(),
-                               window(),
-                               width(),
-                               height()-2,
-                               DefaultDepth(_display.get(),
-                                            DefaultScreen(_display.get())));
+    // create the graphic context
     GC gc = XCreateGC(_display.get(), 
-                      pix,
-                      0, 
+                      _pixmap,
+                      0,
                       (XGCValues *)0);
 
-    XFillRectangle(_display.get(), 
+
+    // reset the background (clear the whole screen)
+    /*XFillRectangle(_display.get(), 
                    window(), 
                    gc, 
                    0, 
                    0, 
                    width(), 
-                   height());
+                   height());*/
 
-    Font f = XLoadFont(_display.get(), "-*-fixed-*-*-*-*-14-*-*-*-*-*-*-*");
+    // set the font used to display the window name in the status
+    // bar
+    // TODO: font stly must be configured
+    XftFont *font = XftFontOpenName (_display.get(),
+                                     0,
+                                     "xft:Ubuntu Mono:size=11:antialias=true");
+    //Font f = XLoadFont(_display.get(), "-*-fixed-*-*-*-*-14-*-*-*-*-*-*-*");
     //Font f = XLoadFont(_display.get(), "xft:Ubuntu Mono:size=11:antialias=true");
 
-    XSetForeground(_display.get(),
+    // set the font color
+    // TODO: font color must be configured
+  /*  XSetForeground(_display.get(),
                    gc,
-                   0x00ff9944);
-    XTextItem ti;
-    ti.chars = const_cast<char*>(status.c_str());
-    ti.nchars = status.length();
-    ti.delta = 0;
-    ti.font = f;
-    XDrawText(_display.get(), 
-              window(), 
-              gc, 
-              5, 
-              20, 
-              &ti,
-              1);
+                   0x00ff9944);*/
+
+    XftDraw *draw = XftDrawCreate (_display.get(),
+                                   window(),
+                                   XDefaultVisual(_display.get(), 0),
+                                   XDefaultColormap(_display.get(), 0));
+
+    XftColor bcolor;
+    bcolor.pixel = 0;
+    bcolor.color.red=0;
+    bcolor.color.green=0;
+    bcolor.color.blue=0;
+    bcolor.color.alpha=0xffff;
+
+    // reset the background (clear the whole screen)
+    XftDrawRect (draw,
+                 &bcolor,
+                 0,
+                 0,
+                 width(),
+                 height());
+
+    //XRenderColor render = {.red=0xffff, .green=0xffff, .blue=0, .alpha=0x50};
+    XftColor color;
+    color.pixel = 0;
+    color.color.red=0xffff;
+    color.color.green=0xffff;
+    color.color.blue=0;
+    color.color.alpha=0xffff;
+
+    XftDrawString8 (draw,
+                    &color,
+                    font,
+                    8,
+                    10,
+                    (const unsigned char*)status.c_str(),
+                    status.length());
+
+    // draw the active screen name in the status bar
+    /*XDrawString(_display.get(), 
+                window(), 
+                gc, 
+                5,  // x
+                10, // y
+                status.c_str(),
+                status.length());
+*/
+    XftFontClose(_display.get(), font);
+    //XUnloadFont(_display.get(), f);
+
+    //XFreeGC(_display.get(), gc);
 }

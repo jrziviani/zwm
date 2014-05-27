@@ -48,9 +48,12 @@ class IWindow
         // Refreshes the window.
         virtual void redraw()           = 0;
 
+        // Initializes the graphic context
+        virtual void initGraphic(int depth)  = 0;
+
         // Creates a simple window.
         // TODO: this method should receive parameters to be customized.
-        virtual void create()           = 0;
+        virtual void create(int depth)  = 0;
 
         // Attaches an existing window in this an instance of this class.
         // TODO: remove attach(pid) - it won't be used.
@@ -65,8 +68,8 @@ class IWindow
         // Resizes the window.
         virtual void resize(int width , int height) = 0;
 
-        /* sets the status title */
-        /* TODO: this should possible be moved to a plugin */
+        // Sets the status title
+        // TODO: this should possible be moved to a plugin
         virtual void setStatusTitle(std::string status) = 0;
         
         //

@@ -1,7 +1,7 @@
 CC=g++ -std=c++11
 CFLAGS=-O0 -g
-LIBS=-lX11
-INCLUDE=-Iinclude -Iinclude/xlibimp
+LIBS=-lX11 $(shell freetype-config --libs) -lXft
+INCLUDE=-Iinclude -Iinclude/xlibimp $(shell freetype-config --cflags)
 
 all: init \
 	 main
