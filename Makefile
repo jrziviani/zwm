@@ -44,5 +44,5 @@ valgrind:
 		--show-reachable=yes xinit ./main -- :1
 
 todo:
-	find . -name \*.h -o -name \*.cpp -exec grep TODO {} + \
+	find . \( -name \*.h -o -name \*.cpp \) -exec grep TODO {} + \
 		| sed "s/^\(.\+.[cpp|h]:\).*\(TODO.*\)$$/\1 \2/" > TODO.list
