@@ -15,6 +15,88 @@
 // DECLARATIONS
 //
 
+/*********************************************************
+ * TODO: ALIEN - this should be removed from here ASAP
+ ********************************************************/
+#include <X11/Xft/Xft.h>
+
+#define RED    Xft::getColor(0xffff, 0,      0,      0xfff)
+#define GREEN  Xft::getColor(0,      0xffff, 0,      0xfff)
+#define BLUE   Xft::getColor(0,      0,      0xffff, 0xfff)
+#define WHITE  Xft::getColor(0xffff, 0xffff, 0xffff, 0xfff)
+#define BLACK  Xft::getColor(0,      0,      0,      0xfff)
+
+class Xft
+{
+    using xlibpp_display = std::unique_ptr<Display, decltype(&XCloseDisplay)>;
+
+    public:
+        Xft(xlibpp_display &display,
+            whandler window,
+            Visual* visual,
+            Colormap colormap) : _display (display),
+                                 _window  (window),
+                                 _draw    {XftDrawCreate(_display.get(),
+                                                         _window,
+                                                         visual,
+                                                         colormap),
+                                           &XftDrawDestroy}
+    {
+    }
+
+    void drawRect(const XftColor &color,
+                  int x,
+                  int y,
+                  int width,
+                  int height)
+    {
+        XftDrawRect(_draw.get(),
+                    &color,
+                    x, y, width, height);
+    }
+                  
+    void drawString(const XftColor &color,
+                    XftFont  &font,
+                    int x,
+                    int y,
+                    const std::string &text)
+    {
+        XftDrawString8(_draw.get(),
+                       &color,
+                       &font,
+                       x,
+                       y,
+                       (const unsigned char*) text.c_str(),
+                       text.length());
+    }
+
+    //
+    // STATIC FUNCTIONS
+    //
+    static XftColor getColor(unsigned short red,
+                             unsigned short green,
+                             unsigned short blue,
+                             unsigned short alpha)
+    {
+        XftColor c;
+        c.pixel = 0;
+        c.color.red   = red;
+        c.color.green = green;
+        c.color.blue  = blue;
+        c.color.alpha = alpha;
+
+        return c;
+    }
+
+    private:
+
+        xlibpp_display &_display;
+        whandler       _window;
+
+        std::unique_ptr<XftDraw, decltype(&XftDrawDestroy)> _draw;
+};
+
+
 // Implements the IWindow interface by using XLib methods for X. Reference to
 // iwindow.h for details.
 class XLibWindow : public IWindow
@@ -83,6 +165,8 @@ class XLibWindow : public IWindow
 
         // Pixmap ID
         Pixmap _pixmap;
+
+        std::unique_ptr<Xft> _xft;
 };
 
 #endif

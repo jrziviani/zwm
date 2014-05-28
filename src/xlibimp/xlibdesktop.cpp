@@ -16,7 +16,7 @@ using namespace std;
 
 XLibDesktop::XLibDesktop(logger &logger) :
     IDesktop   (logger),
-    _display   { XOpenDisplay(0x0), &XCloseDisplay },
+    _display   {XOpenDisplay(0x0), &XCloseDisplay},
     _statusBar (_display)
 {
     _handlers.insert(make_pair(MapRequest,    &XLibDesktop::mapRequest));

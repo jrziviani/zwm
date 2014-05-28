@@ -58,6 +58,11 @@ void XLibWindow::initGraphic(int depth)
                             height(),
                             depth);
     
+    _xft = std::unique_ptr<Xft>(new Xft(_display, 
+                                window(), 
+                                // TODO: these should be passed from the dekstop
+                                XDefaultVisual(_display.get(), 0),
+                                XDefaultColormap(_display.get(), 0)));
 }
 
 void XLibWindow::create(int depth)
@@ -155,7 +160,7 @@ void XLibWindow::setStatusTitle(std::string status)
                    gc,
                    0x00ff9944);*/
 
-    XftDraw *draw = XftDrawCreate (_display.get(),
+    /*XftDraw *draw = XftDrawCreate (_display.get(),
                                    window(),
                                    XDefaultVisual(_display.get(), 0),
                                    XDefaultColormap(_display.get(), 0));
@@ -189,7 +194,12 @@ void XLibWindow::setStatusTitle(std::string status)
                     8,
                     10,
                     (const unsigned char*)status.c_str(),
-                    status.length());
+                    status.length());*/
+
+
+    _xft->drawRect(BLACK, 0, 0, width(), height());
+
+    _xft->drawString(RED, *font, 5, 10, status);
 
     // draw the active screen name in the status bar
     /*XDrawString(_display.get(), 
