@@ -1,6 +1,9 @@
+./src/xlibimp/xlibwindow.cpp: TODO: remove XSelectInput from here, a new method must be created.
 ./src/xlibimp/xlibwindow.cpp: TODO: configure border width
 ./src/xlibimp/xlibwindow.cpp: TODO: configure border color
 ./src/xlibimp/xlibwindow.cpp: TODO: configure bg color
+./src/xlibimp/xlibwindow.cpp: TODO: attach pid won't be used, should be removed
+./src/xlibimp/xlibwindow.cpp: TODO: font stile must be configured by the user.
 ./src/xlibimp/xlibdesktop.cpp: TODO: get the root window based on the screenNumber
 ./src/main.cpp: TODO: accel keys should go to a config file */
 ./src/main.cpp: TODO: implement a factory to create the real desktop
@@ -8,7 +11,7 @@
 ./include/log.h: TODO: Improve debug mode for speed.
 ./include/iwindow.h: TODO: this method should receive parameters to be customized.
 ./include/iwindow.h: TODO: remove attach(pid) - it won't be used.
-./include/iwindow.h: TODO: this should possible be moved to a plugin */
+./include/iwindow.h: TODO: this should possible be moved to a plugin
 ./include/xlibimp/xlibwindow.h: TODO: const ref?
 ./include/xlibimp/xlibwindow.h: TODO: remove this method setDisplay.
 ./include/idesktop.h: TODO: status bar should accept parameter to configure
