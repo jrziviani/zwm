@@ -5,9 +5,9 @@
 
 XLibWindow::XLibWindow(xlibpp_display &display) :
     _display(display),
-    _pixmap(None)
+    _pixmap(None),
+    _visual(nullptr)
 {
-
 }
 
 XLibWindow::~XLibWindow()
@@ -36,39 +36,56 @@ void XLibWindow::iconfy()
 
 }
 
+void XLibWindow::setColormap(Colormap colormap)
+{
+    _colormap = colormap;
+}
+
+void XLibWindow::setVisual(Visual *visual)
+{
+    _visual = visual;
+}
+
 void XLibWindow::redraw()
 {
     assert(_display.get() != nullptr);
 
+    // updates the place if needed.
     move(x(), y());
+
+    // updates the size if needed.
     resize(width(), height());
+
+    // show the window.
     XMapWindow(_display.get(), window());
+
+    // register the window to receive EnterWindow event, this is specially
+    // important to let the desktop knows when this window object receives
+    // the focus, so the status bar can be updated.
+    // TODO: remove XSelectInput from here, a new method must be created.
     XSelectInput(_display.get(), window(), EnterWindowMask);
 }
 
 void XLibWindow::initGraphic(int depth)
 {
     assert(_display.get() != nullptr);
+    assert(_visual != nullptr);
 
-    // create a pixmap with the same window size as
-    // a drawable for the graphic context
-    _pixmap = XCreatePixmap(_display.get(),
-                            window(),
-                            width(),
-                            height(),
-                            depth);
-    
+    // create a Xft object specially to use modern X11 fonts
+    // in the window status bar, this gives more flexibilty,
+    // more options and bring some more beauty to it.
     _xft = std::unique_ptr<Xft>(new Xft(_display, 
                                 window(), 
-                                // TODO: these should be passed from the dekstop
-                                XDefaultVisual(_display.get(), 0),
-                                XDefaultColormap(_display.get(), 0)));
+                                _visual,
+                                _colormap));
 }
 
 void XLibWindow::create(int depth)
 {
     assert(_display.get() != nullptr);
 
+    // create a simple window using the position and size
+    // defined by the user.
     Window wnd = XCreateSimpleWindow(_display.get(),
                                      parent(),
                                      x(),
@@ -78,14 +95,22 @@ void XLibWindow::create(int depth)
                                      1,                              // TODO: configure border width
                                      0x00ff9944,                     // TODO: configure border color
                                      BlackPixel(_display.get(), 0)); // TODO: configure bg color
+
+    // set the id to this object so the desktop will be able
+    // to handle it whenever need.
     window(wnd);
+
+    // show the window.
     XMapWindow(_display.get(), wnd);
+
+    // initialize the graphic context to display strings and
+    // others visual components.
     initGraphic(depth);
 }
 
 void XLibWindow::attach(pid_t pid)
 {
-
+    // TODO: attach pid won't be used, should be removed
 }
 
 void XLibWindow::destroy()
@@ -129,89 +154,20 @@ void XLibWindow::setStatusTitle(std::string status)
 {
     assert(_display.get() != nullptr);
 
-    // create the graphic context
-    GC gc = XCreateGC(_display.get(), 
-                      _pixmap,
-                      0,
-                      (XGCValues *)0);
-
-
-    // reset the background (clear the whole screen)
-    /*XFillRectangle(_display.get(), 
-                   window(), 
-                   gc, 
-                   0, 
-                   0, 
-                   width(), 
-                   height());*/
-
     // set the font used to display the window name in the status
-    // bar
-    // TODO: font stly must be configured
+    // bar, as we use xft we have more power to choose better and
+    // modern fonts, including antialising.
+    // TODO: font stile must be configured by the user.
     XftFont *font = XftFontOpenName (_display.get(),
                                      0,
                                      "xft:Ubuntu Mono:size=11:antialias=true");
-    //Font f = XLoadFont(_display.get(), "-*-fixed-*-*-*-*-14-*-*-*-*-*-*-*");
-    //Font f = XLoadFont(_display.get(), "xft:Ubuntu Mono:size=11:antialias=true");
 
-    // set the font color
-    // TODO: font color must be configured
-  /*  XSetForeground(_display.get(),
-                   gc,
-                   0x00ff9944);*/
-
-    /*XftDraw *draw = XftDrawCreate (_display.get(),
-                                   window(),
-                                   XDefaultVisual(_display.get(), 0),
-                                   XDefaultColormap(_display.get(), 0));
-
-    XftColor bcolor;
-    bcolor.pixel = 0;
-    bcolor.color.red=0;
-    bcolor.color.green=0;
-    bcolor.color.blue=0;
-    bcolor.color.alpha=0xffff;
-
-    // reset the background (clear the whole screen)
-    XftDrawRect (draw,
-                 &bcolor,
-                 0,
-                 0,
-                 width(),
-                 height());
-
-    //XRenderColor render = {.red=0xffff, .green=0xffff, .blue=0, .alpha=0x50};
-    XftColor color;
-    color.pixel = 0;
-    color.color.red=0xffff;
-    color.color.green=0xffff;
-    color.color.blue=0;
-    color.color.alpha=0xffff;
-
-    XftDrawString8 (draw,
-                    &color,
-                    font,
-                    8,
-                    10,
-                    (const unsigned char*)status.c_str(),
-                    status.length());*/
-
-
+    // 'clear' the screen drawing the string.
     _xft->drawRect(BLACK, 0, 0, width(), height());
 
+    // draws the status bar in the window.
     _xft->drawString(RED, *font, 5, 10, status);
 
-    // draw the active screen name in the status bar
-    /*XDrawString(_display.get(), 
-                window(), 
-                gc, 
-                5,  // x
-                10, // y
-                status.c_str(),
-                status.length());
-*/
+    // release the font resource.
     XftFontClose(_display.get(), font);
-    //XUnloadFont(_display.get(), f);
-
-    //XFreeGC(_display.get(), gc);
 }

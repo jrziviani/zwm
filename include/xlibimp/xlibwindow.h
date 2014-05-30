@@ -67,9 +67,14 @@ class XLibWindow : public IWindow
         // TODO: remove this method setDisplay.
         void setDisplay(xlibpp_display display);
 
-        // Sets the status title
+        // Sets the status title.
         void setStatusTitle(std::string status);
 
+        // Sets the colormap
+        void setColormap(Colormap colormap);
+
+        // Sets the visual type
+        void setVisual(Visual *visual);
     private:
 
         // Sets the window non copyable and non moveable (std::move).
@@ -81,8 +86,14 @@ class XLibWindow : public IWindow
         // References to desktop display.
         xlibpp_display &_display;
 
-        // Pixmap ID
+        // Pixmap ID.
         Pixmap _pixmap;
+
+        // Colormap.
+        Colormap _colormap;
+
+        // Visual type.
+        Visual *_visual;
 
         std::unique_ptr<Xft> _xft;
 };

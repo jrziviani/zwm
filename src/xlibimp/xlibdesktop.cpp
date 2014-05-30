@@ -60,6 +60,20 @@ int XLibDesktop::getNumberOfScreens()
     return ScreenCount(_display.get());
 }
 
+Colormap XLibDesktop::getColormap(int screenNumber)
+{
+    assert(_display.get() != nullptr);
+
+    return DefaultColormap(_display.get(), screenNumber);
+}
+
+Visual *XLibDesktop::getVisual(int screenNumber)
+{
+    assert(_display.get() != nullptr);
+
+    return DefaultVisual(_display.get(), screenNumber);
+}
+
 void XLibDesktop::initRootWindow(int screenNumber)
 {
     assert(_display.get() != nullptr);
@@ -223,6 +237,8 @@ void XLibDesktop::setStatusBar()
     _statusBar.width(width(0) - 1);
     _statusBar.height(height(0) / 50);
     _statusBar.parent(_window);
+    _statusBar.setColormap(getColormap(0));
+    _statusBar.setVisual(getVisual(0));
     _statusBar.create(depth(0));
 }
 

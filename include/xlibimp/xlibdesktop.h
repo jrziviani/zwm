@@ -64,6 +64,12 @@ class XLibDesktop : public IDesktop
         // Defines the accel keys in lib
         void setAccelKeys();
 
+        // Gets the colormap ID
+        Colormap getColormap(int screenNumber);
+
+        // Gets the visual type
+        Visual *getVisual(int screenNumber);
+
         // Event handlers
         void mapRequest(XEvent &e   , args_t &arg);
         void keyPress(XEvent &e     , args_t &arg);
