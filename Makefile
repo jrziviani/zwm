@@ -1,5 +1,5 @@
 CC=g++ -std=c++11
-CFLAGS=-O0 -g
+CFLAGS=-O0 -g -Wall
 LIBS=-lX11 $(shell freetype-config --libs) -lXft
 INCLUDE=-Iinclude -Iinclude/xlibimp $(shell freetype-config --cflags)
 
@@ -11,10 +11,10 @@ init:
 	@-rm -fr build
 	@mkdir build
 
-main: keymap.o helper.o xlibdesktop.o xlibwindow.o
+main: keymap.o helper.o xlibdesktop.o xlibwindow.o xlibstatuswindow.o
 	$(CC) $(CFLAGS) $(INCLUDE) src/main.cpp \
 		build/xlibdesktop.o build/helper.o build/keymap.o \
-		build/xlibwindow.o \
+		build/xlibwindow.o build/xlibstatuswindow.o \
 		$(LIBS) -o main
 
 xlibdesktop.o: src/xlibimp/xlibdesktop.cpp include/xlibimp/xlibdesktop.h
@@ -28,6 +28,9 @@ keymap.o: src/keymap.cpp include/keymap.h
 
 xlibwindow.o: src/xlibimp/xlibwindow.cpp include/xlibimp/xlibwindow.h include/iwindow.h
 	$(CC) $(CFLAGS) $(INCLUDE) -c src/xlibimp/xlibwindow.cpp -o build/xlibwindow.o
+
+xlibstatuswindow.o: src/xlibimp/xlibstatuswindow.cpp include/xlibimp/xlibstatuswindow.h
+	$(CC) $(CFLAGS) $(INCLUDE) -c src/xlibimp/xlibstatuswindow.cpp -o build/xlibstatuswindow.o
 
 clean:
 	@echo "Cleaning binaries"
