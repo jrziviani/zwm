@@ -35,6 +35,8 @@ class XLibDesktop : public IDesktop
 
         XLibDesktop(logger &logger);
 
+        ~XLibDesktop();
+
         // Executes the main entry (event handler) of the desktop.
         void loop();
 
@@ -87,7 +89,11 @@ class XLibDesktop : public IDesktop
         // Event handlers maps.
         std::unordered_map <int, handler> _handlers;
 
+        // Status bar;
         XLibWindow _statusBar;
+
+        // Cursor id.
+        Cursor _cursor;
 };
 
 #endif

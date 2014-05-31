@@ -14,7 +14,8 @@
 KeyMaps maps {
     KeyMap { XStringToKeysym("F1"), Mod1Mask, 0, "xterm" },
     KeyMap { XStringToKeysym("F2"), Mod1Mask, 0, "gnome-calculator" },
-    KeyMap { XStringToKeysym("F3"), Mod1Mask, 0, "gnome-terminal" }
+    KeyMap { XStringToKeysym("F3"), Mod1Mask, 0, "gnome-terminal" },
+    KeyMap { XStringToKeysym("Q"), Mod1Mask, 0, "quit" }
 };
 
 int main(int argc, char *argv[])
@@ -24,10 +25,10 @@ int main(int argc, char *argv[])
     logger myLog(ofs);
 
     // TODO: implement a factory to create the real desktop
-    std::unique_ptr<IDesktop> pDesktop(new XLibDesktop(myLog));
+    IDesktop *pDesktop = new XLibDesktop(myLog);
     pDesktop->setKeyMaps(maps);
-    pDesktop->initRootWindow(0);
     pDesktop->loop();
+    delete pDesktop;
 
     /*using namespace std;
     string o, e;

@@ -17,7 +17,8 @@ using namespace std;
 XLibDesktop::XLibDesktop(logger &logger) :
     IDesktop   (logger),
     _display   {XOpenDisplay(0x0), &XCloseDisplay},
-    _statusBar (_display)
+    _statusBar (_display),
+    _cursor    (None)
 {
     _handlers.insert(make_pair(MapRequest,    &XLibDesktop::mapRequest));
     _handlers.insert(make_pair(KeyPress,      &XLibDesktop::keyPress));
@@ -27,6 +28,16 @@ XLibDesktop::XLibDesktop(logger &logger) :
     _handlers.insert(make_pair(MapNotify,     &XLibDesktop::mapNotify));
     _handlers.insert(make_pair(LeaveNotify,   &XLibDesktop::enterNotify));
     _handlers.insert(make_pair(EnterNotify,   &XLibDesktop::enterNotify));
+
+    initRootWindow(0);
+}
+
+XLibDesktop::~XLibDesktop()
+{
+    XUndefineCursor(_display.get(), _window);
+
+    if (_cursor != None)
+        XFreeCursor(_display.get(), _cursor);
 }
 
 int XLibDesktop::width(int screenNumber)
@@ -79,17 +90,16 @@ void XLibDesktop::initRootWindow(int screenNumber)
     assert(_display.get() != nullptr);
     assert(screenNumber >= 0 && screenNumber < this->getNumberOfScreens());
 
-    Cursor cursor, hand_cursor;
-
     // TODO: get the root window based on the screenNumber
     DEBUG(_logger, "Number of screens: " << getNumberOfScreens());
 
-    cursor = XCreateFontCursor(_display.get(), XC_left_ptr);
-    hand_cursor = XCreateFontCursor(_display.get(), XC_hand2);
+    _window = XDefaultRootWindow(_display.get());
 
-    _window = DefaultRootWindow(_display.get());
-    XDefineCursor(_display.get(), _window, cursor);
+    // set the cursor used in desktop
+    //_cursor = XCreateFontCursor(_display.get(), XC_left_ptr);
+    //XDefineCursor(_display.get(), _window, _cursor);
 
+    // choose the events we want to handle
     XSelectInput(_display.get(), _window, SubstructureRedirectMask |
                                           FocusChangeMask |
                                           VisibilityChangeMask |
@@ -101,6 +111,8 @@ void XLibDesktop::initRootWindow(int screenNumber)
                                           PropertyChangeMask |
                                           ExposureMask |
                                           KeyPressMask);
+
+    // grab the mouse left button
     XGrabButton(_display.get(),
                 1,
                 Mod1Mask,
@@ -112,6 +124,7 @@ void XLibDesktop::initRootWindow(int screenNumber)
                 None,
                 None);
 
+    // grab the mouse right button
     XGrabButton(_display.get(),
                 3,
                 Mod1Mask,
@@ -227,6 +240,9 @@ void XLibDesktop::loop()
 
         // call the handler based on the event type received
         (this->*_handlers[event.type])(event, args);
+
+        if (args.buttonPressed == button_t::MIDDLE)
+            break;
     }
 }
 
@@ -271,9 +287,13 @@ void XLibDesktop::keyPress(XEvent &e, args_t &arg)
         if (XKeysymToKeycode(_display.get(), k.getKey()) == e.xkey.keycode &&
             k.getMod1() | k.getMod2() == e.xkey.state)
         {
+            if (k.getProgram() == "quit")
+            {
+                arg.buttonPressed = button_t::MIDDLE;
+                return;
+            }
             INFO(_logger, "Starting program " << k.getProgram());
             helper::callProgramBg(k.getProgram().c_str());
-            break;
         }
     }
 }
@@ -341,19 +361,8 @@ void XLibDesktop::enterNotify(XEvent &e, args_t &arg)
     XTextProperty title;
     XGetWMName(_display.get(), e.xcrossing.window, &title);
 
-/*    if (e.xfocus.window == None)
-    {
-        ERROR(_logger, "focus window none");
-        return;
-    }
-    XTextProperty title;
-    XGetWMName(_display.get(), e.xfocus.window, &title);*/
-
     if (!title.value)
-    {
-        _statusBar.setStatusTitle("No focus...");
         return;
-    }
 
     std::string tmp((char*) title.value);
     INFO(_logger, tmp);
@@ -369,10 +378,7 @@ void XLibDesktop::mapNotify(XEvent &e, args_t &arg)
     XGetWMName(_display.get(), e.xmap.window, &title);
 
     if (!title.value)
-    {
-        _statusBar.setStatusTitle("No window opened...");
         return;
-    }
 
     std::string tmp((char*) title.value);
     INFO(_logger, tmp);

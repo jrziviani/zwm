@@ -32,74 +32,94 @@ class Xft
         Xft(xlibpp_display &display,
             const whandler window,
             Visual* visual,
+            const std::string& fontname,
             const Colormap colormap) : _display (display),
-                                       _draw    {XftDrawCreate(_display.get(),
-                                                         window,
-                                                         visual,
-                                                         colormap),
-                                                 &XftDrawDestroy}
-    {
-    }
+                                       _font    (nullptr),
+                                       _draw    (nullptr)
+        {
+            _draw = XftDrawCreate(_display.get(),
+                                  window,
+                                  visual,
+                                  colormap);
+            _font = XftFontOpenName(_display.get(), 0, fontname.c_str());
+        }
 
-    // Draws a simple rectangle in the window.
-    void drawRect(const XftColor &color,
-                  const int x,
-                  const int y,
-                  const int width,
-                  const int height) const
-    {
-        XftDrawRect(_draw.get(),
-                    &color,
-                    x,
-                    y,
-                    width,
-                    height);
-    }
+        ~Xft()
+        {
+            if (_font)
+            {
+                XftFontClose(_display.get(), _font);
+                _font = nullptr;
+            }
 
-    // Draws a string in the string using moderns
-    // X11 fonts.
-    void drawString(const XftColor &color,
-                    XftFont  &font,
-                    const int x,
-                    const int y,
-                    const std::string &text) const
-    {
-        XftDrawString8(_draw.get(),
-                       &color,
-                       &font,
-                       x,
-                       y,
-                       (const unsigned char*) text.c_str(),
-                       text.length());
-    }
+            if (_draw)
+            {
+                XftDrawDestroy(_draw);
+                _draw = nullptr;
+            }
+        }
 
-    //
-    // STATIC FUNCTIONS
-    //
-    // Returns a xft color structure based on the color selected
-    // by the user
-    static XftColor getColor(unsigned short red,
-                             unsigned short green,
-                             unsigned short blue,
-                             unsigned short alpha)
-    {
-        XftColor c;
-        c.pixel = 0;
-        c.color.red   = red;
-        c.color.green = green;
-        c.color.blue  = blue;
-        c.color.alpha = alpha;
+        // Draws a simple rectangle in the window.
+        void drawRect(const XftColor &color,
+                      const int x,
+                      const int y,
+                      const int width,
+                      const int height) const
+        {
+            XftDrawRect(_draw,
+                        &color,
+                        x,
+                        y,
+                        width,
+                        height);
+        }
 
-        return c;
-    }
+        // Draws a string in the string using moderns
+        // X11 fonts.
+        void drawString(const XftColor &color,
+                        const int x,
+                        const int y,
+                        const std::string &text) const
+        {
+            XftDrawString8(_draw,
+                           &color,
+                           _font,
+                           x,
+                           y,
+                           (const unsigned char*) text.c_str(),
+                           text.length());
+        }
+
+        //
+        // STATIC FUNCTIONS
+        //
+        // Returns a xft color structure based on the color selected
+        // by the user
+        static XftColor getColor(unsigned short red,
+                                 unsigned short green,
+                                 unsigned short blue,
+                                 unsigned short alpha)
+        {
+            XftColor c;
+            c.pixel = 0;
+            c.color.red   = red;
+            c.color.green = green;
+            c.color.blue  = blue;
+            c.color.alpha = alpha;
+
+            return c;
+        }
 
     private:
 
         // References to desktop display.
         xlibpp_display &_display;
 
+        // Font used by the status bar.
+        XftFont *_font;
+
         // Handles the xft scope
-        std::unique_ptr<XftDraw, decltype(&XftDrawDestroy)> _draw;
+        XftDraw *_draw;
 };
 
 #endif

@@ -1,7 +1,6 @@
 #include "xlibwindow.h"
 
 #include <cassert>
-#include <X11/Xft/Xft.h>
 
 XLibWindow::XLibWindow(xlibpp_display &display) :
     _display(display),
@@ -77,6 +76,7 @@ void XLibWindow::initGraphic(int depth)
     _xft = std::unique_ptr<Xft>(new Xft(_display, 
                                 window(), 
                                 _visual,
+                                "xft:Ubuntu Mono:size=11:antialias=true",
                                 _colormap));
 }
 
@@ -158,16 +158,16 @@ void XLibWindow::setStatusTitle(std::string status)
     // bar, as we use xft we have more power to choose better and
     // modern fonts, including antialising.
     // TODO: font stile must be configured by the user.
-    XftFont *font = XftFontOpenName (_display.get(),
-                                     0,
-                                     "xft:Ubuntu Mono:size=11:antialias=true");
+    //XftFont *font = XftFontOpenName (_display.get(),
+    //                                 0,
+    //                                 "xft:Ubuntu Mono:size=11:antialias=true");
 
     // 'clear' the screen drawing the string.
     _xft->drawRect(BLACK, 0, 0, width(), height());
 
     // draws the status bar in the window.
-    _xft->drawString(RED, *font, 5, 10, status);
+    _xft->drawString(RED, 5, 10, status);
 
     // release the font resource.
-    XftFontClose(_display.get(), font);
+    //XftFontClose(_display.get(), font);
 }
