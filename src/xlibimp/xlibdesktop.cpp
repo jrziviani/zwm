@@ -159,7 +159,6 @@ Window XLibDesktop::getWindowByPID(unsigned long pid)
     Window root;
     Window parent;
     Window *children;
-    Status status;
     unsigned int total;
 
     Atom type;
@@ -203,12 +202,12 @@ Window XLibDesktop::getWindowByPID(unsigned long pid)
         XFree(pPid);
 
         // search for all windows placed in the desktop
-        status = XQueryTree(_display.get(),
-                            lookupWnd,
-                            &root,
-                            &parent,
-                            &children,
-                            &total);
+        XQueryTree(_display.get(),
+                   lookupWnd,
+                   &root,
+                   &parent,
+                   &children,
+                   &total);
 
         // fill the stack with children windows to be
         // searched
@@ -220,6 +219,8 @@ Window XLibDesktop::getWindowByPID(unsigned long pid)
 
         XFree(children);
     }
+
+    return None;
 }
 
 void XLibDesktop::loop()
@@ -285,7 +286,7 @@ void XLibDesktop::keyPress(XEvent &e, args_t &arg)
     for (KeyMap k : _keyMaps)
     {
         if (XKeysymToKeycode(_display.get(), k.getKey()) == e.xkey.keycode &&
-            k.getMod1() | k.getMod2() == e.xkey.state)
+            (k.getMod1() | k.getMod2()) == e.xkey.state)
         {
             if (k.getProgram() == "quit")
             {

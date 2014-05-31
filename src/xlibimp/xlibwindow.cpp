@@ -4,15 +4,12 @@
 
 XLibWindow::XLibWindow(xlibpp_display &display) :
     _display(display),
-    _pixmap(None),
     _visual(nullptr)
 {
 }
 
 XLibWindow::~XLibWindow()
 {
-    if (_pixmap != None)
-        XFreePixmap(_display.get(), _pixmap);
 }
 
 void XLibWindow::minimize()
@@ -65,21 +62,6 @@ void XLibWindow::redraw()
     XSelectInput(_display.get(), window(), EnterWindowMask);
 }
 
-void XLibWindow::initGraphic(int depth)
-{
-    assert(_display.get() != nullptr);
-    assert(_visual != nullptr);
-
-    // create a Xft object specially to use modern X11 fonts
-    // in the window status bar, this gives more flexibilty,
-    // more options and bring some more beauty to it.
-    _xft = std::unique_ptr<Xft>(new Xft(_display, 
-                                window(), 
-                                _visual,
-                                "xft:Ubuntu Mono:size=11:antialias=true",
-                                _colormap));
-}
-
 void XLibWindow::create(int depth)
 {
     assert(_display.get() != nullptr);
@@ -102,15 +84,6 @@ void XLibWindow::create(int depth)
 
     // show the window.
     XMapWindow(_display.get(), wnd);
-
-    // initialize the graphic context to display strings and
-    // others visual components.
-    initGraphic(depth);
-}
-
-void XLibWindow::attach(pid_t pid)
-{
-    // TODO: attach pid won't be used, should be removed
 }
 
 void XLibWindow::destroy()
@@ -148,26 +121,4 @@ void XLibWindow::resize(int width, int height)
                       y(),
                       width,
                       height);
-}
-
-void XLibWindow::setStatusTitle(std::string status)
-{
-    assert(_display.get() != nullptr);
-
-    // set the font used to display the window name in the status
-    // bar, as we use xft we have more power to choose better and
-    // modern fonts, including antialising.
-    // TODO: font stile must be configured by the user.
-    //XftFont *font = XftFontOpenName (_display.get(),
-    //                                 0,
-    //                                 "xft:Ubuntu Mono:size=11:antialias=true");
-
-    // 'clear' the screen drawing the string.
-    _xft->drawRect(BLACK, 0, 0, width(), height());
-
-    // draws the status bar in the window.
-    _xft->drawString(RED, 5, 10, status);
-
-    // release the font resource.
-    //XftFontClose(_display.get(), font);
 }

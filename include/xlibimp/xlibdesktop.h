@@ -7,7 +7,7 @@
 //
 #include "keymap.h"
 #include "idesktop.h"
-#include "xlibwindow.h"
+#include "xlibstatuswindow.h"
 
 #include <memory>
 #include <vector>
@@ -90,7 +90,7 @@ class XLibDesktop : public IDesktop
         std::unordered_map <int, handler> _handlers;
 
         // Status bar;
-        XLibWindow _statusBar;
+        XLibStatusWindow _statusBar;
 
         // Cursor id.
         Cursor _cursor;
