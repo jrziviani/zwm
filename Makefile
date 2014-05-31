@@ -39,9 +39,12 @@ deploy: clean all
 	xinit ./main -- :1
 
 valgrind:
-	valgrind --tool=memcheck --leak-check=full  \
-		--track-origins=yes \
-		--show-reachable=yes xinit ./main -- :1
+	DISPLAY=:1 valgrind --tool=memcheck --leak-check=full  \
+		--track-origins=yes --suppressions=supp/xlib.supp \
+		--suppressions=supp/libxft.supp \
+		--show-reachable=yes ./main
+		#--gen-suppressions=all --log-file=libxft.supp \
+		#--show-reachable=yes xinit ./main -- :1
 
 todo:
 	find . \( -name \*.h -o -name \*.cpp \) -exec grep TODO {} + \

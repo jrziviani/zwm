@@ -1,0 +1,1679 @@
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   fun:FcStrSetAdd
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcGetDefaultLangs
+   fun:FcConfigSubstituteWithPat
+   fun:XftFontMatch
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+   fun:_ZN10XLibWindow11initGraphicEi
+   fun:_ZN10XLibWindow6createEi
+   fun:_ZN11XLibDesktop12setStatusBarEv
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcDefaultSubstitute
+   fun:XftDefaultSubstitute
+   fun:XftFontMatch
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+   fun:_ZN10XLibWindow11initGraphicEi
+   fun:_ZN10XLibWindow6createEi
+   fun:_ZN11XLibDesktop12setStatusBarEv
+   fun:_ZN11XLibDesktop14initRootWindowEi
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcConfigSubstituteWithPat
+   fun:XftFontMatch
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+   fun:_ZN10XLibWindow11initGraphicEi
+   fun:_ZN10XLibWindow6createEi
+   fun:_ZN11XLibDesktop12setStatusBarEv
+   fun:_ZN11XLibDesktop14initRootWindowEi
+   fun:_ZN11XLibDesktopC1ER6logger
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcPatternGet
+   fun:XftDefaultSubstitute
+   fun:XftFontMatch
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+   fun:_ZN10XLibWindow11initGraphicEi
+   fun:_ZN10XLibWindow6createEi
+   fun:_ZN11XLibDesktop12setStatusBarEv
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:ft_mem_qalloc
+   fun:ft_mem_alloc
+   fun:ft_mem_qrealloc
+   fun:ft_mem_realloc
+   fun:FT_GlyphLoader_CheckPoints
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   fun:FT_Load_Glyph
+   fun:XftFontLoadGlyphs
+   fun:XftGlyphRender
+   fun:XftDrawGlyphs
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcPatternGet
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   fun:XftDefaultHasRender
+   fun:XftDefaultSubstitute
+   fun:XftFontMatch
+   fun:XftFontOpenName
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcPatternGet
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   fun:XftDefaultHasRender
+   fun:XftDefaultSubstitute
+   fun:XftFontMatch
+   fun:XftFontOpenName
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcBlanksCreate
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcFontSetCreate
+   fun:FcConfigBuildFonts
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:XftInit
+   fun:XftFontMatch
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+   fun:_ZN10XLibWindow11initGraphicEi
+   fun:_ZN10XLibWindow6createEi
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcFontSetCreate
+   fun:FcConfigCreate
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:XftInit
+   fun:XftFontMatch
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+   fun:_ZN10XLibWindow11initGraphicEi
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcFontSetCreate
+   fun:FcConfigCreate
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:XftInit
+   fun:XftFontMatch
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+   fun:_ZN10XLibWindow11initGraphicEi
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcStrSetAdd
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcGetDefaultLangs
+   fun:FcConfigSubstituteWithPat
+   fun:XftFontMatch
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+   fun:_ZN10XLibWindow11initGraphicEi
+   fun:_ZN10XLibWindow6createEi
+   fun:_ZN11XLibDesktop12setStatusBarEv
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   fun:FcStrSetAdd
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcStrCopyFilename
+   fun:FcStrSetAddFilename
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcStrCopyFilename
+   fun:FcStrSetAddFilename
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   fun:FcStrSetAdd
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:XftInit
+   fun:XftFontMatch
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcStrSetCreate
+   fun:FcConfigCreate
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:XftInit
+   fun:XftFontMatch
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+   fun:_ZN10XLibWindow11initGraphicEi
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcStrSetCreate
+   fun:FcConfigCreate
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:XftInit
+   fun:XftFontMatch
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+   fun:_ZN10XLibWindow11initGraphicEi
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcStrSetCreate
+   fun:FcConfigCreate
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:XftInit
+   fun:XftFontMatch
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+   fun:_ZN10XLibWindow11initGraphicEi
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcStrSetCreate
+   fun:FcConfigCreate
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:XftInit
+   fun:XftFontMatch
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+   fun:_ZN10XLibWindow11initGraphicEi
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcStrSetCreate
+   fun:FcConfigCreate
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:XftInit
+   fun:XftFontMatch
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+   fun:_ZN10XLibWindow11initGraphicEi
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcStrSetCreate
+   fun:FcConfigCreate
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:XftInit
+   fun:XftFontMatch
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+   fun:_ZN10XLibWindow11initGraphicEi
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcStrSetCreate
+   fun:FcGetDefaultLangs
+   fun:FcConfigSubstituteWithPat
+   fun:XftFontMatch
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+   fun:_ZN10XLibWindow11initGraphicEi
+   fun:_ZN10XLibWindow6createEi
+   fun:_ZN11XLibDesktop12setStatusBarEv
+   fun:_ZN11XLibDesktop14initRootWindowEi
+   fun:_ZN11XLibDesktopC1ER6logger
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcStrCopyFilename
+   fun:FcStrSetAddFilename
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcStrSetAddFilename
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XRenderFindDisplay
+   fun:XRenderFreeGlyphSet
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   fun:XCloseDisplay
+   fun:_ZNSt10unique_ptrI9_XDisplayPFiPS0_EED1Ev
+   fun:_ZN11XLibDesktopD1Ev
+   fun:_ZN11XLibDesktopD0Ev
+   fun:main
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcPatternGet
+   fun:XftDefaultSubstitute
+   fun:XftFontMatch
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+   fun:_ZN10XLibWindow11initGraphicEi
+   fun:_ZN10XLibWindow6createEi
+   fun:_ZN11XLibDesktop12setStatusBarEv
+   fun:_ZN11XLibDesktop14initRootWindowEi
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcPatternGet
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   fun:XftDefaultHasRender
+   fun:XftDefaultSubstitute
+   fun:XftFontMatch
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcPatternGet
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   fun:XftDefaultHasRender
+   fun:XftDefaultSubstitute
+   fun:XftFontMatch
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FT_New_Memory
+   fun:FT_Init_FreeType
+   fun:XftInitFtLibrary
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   fun:XftFontOpenPattern
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+   fun:_ZN10XLibWindow11initGraphicEi
+   fun:_ZN10XLibWindow6createEi
+   fun:_ZN11XLibDesktop12setStatusBarEv
+   fun:_ZN11XLibDesktop14initRootWindowEi
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:ft_mem_qalloc
+   fun:ft_mem_alloc
+   fun:ft_mem_qrealloc
+   fun:ft_mem_realloc
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   fun:FT_Load_Glyph
+   fun:XftFontLoadGlyphs
+   fun:XftGlyphRender
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcDirCacheLoad
+   fun:FcDirCacheRead
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcConfigBuildFonts
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   fun:FcStrSetAdd
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:ft_mem_qalloc
+   fun:ft_mem_alloc
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   fun:FT_Add_Module
+   fun:FT_Add_Default_Modules
+   fun:FT_Init_FreeType
+   fun:XftInitFtLibrary
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   fun:XftFontOpenPattern
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcStrSetAddFilename
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XrmInternalStringToQuark
+   fun:XrmInitialize
+   obj:/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+   fun:XGetDefault
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   fun:XftDefaultHasRender
+   fun:XftDefaultSubstitute
+   fun:XftFontMatch
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcStrSetAddFilename
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:realloc
+   fun:ft_mem_qrealloc
+   fun:ft_mem_realloc
+   fun:FT_GlyphLoader_CheckPoints
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   fun:FT_Load_Glyph
+   fun:XftFontLoadGlyphs
+   fun:XftGlyphRender
+   fun:XftDrawGlyphs
+   fun:XftDrawString8
+   fun:_ZNK3Xft10drawStringERK9_XftColoriiRKSs
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:ft_mem_qalloc
+   fun:ft_mem_alloc
+   fun:FT_Add_Module
+   fun:FT_Add_Default_Modules
+   fun:FT_Init_FreeType
+   fun:XftInitFtLibrary
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   fun:XftFontOpenPattern
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+   fun:_ZN10XLibWindow11initGraphicEi
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:ft_mem_qalloc
+   fun:ft_mem_alloc
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   fun:FT_Add_Module
+   fun:FT_Add_Default_Modules
+   fun:FT_Init_FreeType
+   fun:XftInitFtLibrary
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   fun:XftFontOpenPattern
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcConfigCreate
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:XftInit
+   fun:XftFontMatch
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+   fun:_ZN10XLibWindow11initGraphicEi
+   fun:_ZN10XLibWindow6createEi
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:ft_mem_qalloc
+   fun:ft_mem_alloc
+   fun:FT_GlyphLoader_New
+   fun:FT_Add_Module
+   fun:FT_Add_Default_Modules
+   fun:FT_Init_FreeType
+   fun:XftInitFtLibrary
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   fun:XftFontOpenPattern
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcFontSetAdd
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:realloc
+   fun:FcBlanksAdd
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcStrSetAddFilename
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcStrSetAddFilename
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:ft_mem_qalloc
+   fun:ft_mem_alloc
+   fun:FT_New_Library
+   fun:FT_Init_FreeType
+   fun:XftInitFtLibrary
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   fun:XftFontOpenPattern
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+   fun:_ZN10XLibWindow11initGraphicEi
+   fun:_ZN10XLibWindow6createEi
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   fun:FcValueSave
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcStrSetAdd
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:FcPatternCreate
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcStrSetAddFilename
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcConfigBuildFonts
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:XftInit
+   fun:XftFontMatch
+   fun:XftFontOpenName
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:realloc
+   fun:ft_mem_qrealloc
+   fun:ft_mem_realloc
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   fun:FT_Load_Glyph
+   fun:XftFontLoadGlyphs
+   fun:XftGlyphRender
+   fun:XftDrawGlyphs
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:ft_mem_qalloc
+   fun:ft_mem_alloc
+   fun:TT_New_Context
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   fun:FT_Add_Module
+   fun:FT_Add_Default_Modules
+   fun:FT_Init_FreeType
+   fun:XftInitFtLibrary
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   fun:XftFontOpenPattern
+   fun:XftFontOpenName
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:ft_mem_qalloc
+   fun:ft_mem_alloc
+   fun:FT_GlyphLoader_New
+   fun:FT_Add_Module
+   fun:FT_Add_Default_Modules
+   fun:FT_Init_FreeType
+   fun:XftInitFtLibrary
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   fun:XftFontOpenPattern
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:ft_mem_qalloc
+   fun:ft_mem_alloc
+   fun:ft_mem_qrealloc
+   fun:ft_mem_realloc
+   fun:TT_New_Context
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   fun:FT_Add_Module
+   fun:FT_Add_Default_Modules
+   fun:FT_Init_FreeType
+   fun:XftInitFtLibrary
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:realloc
+   fun:ft_mem_qrealloc
+   fun:ft_mem_realloc
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   fun:FT_Load_Glyph
+   fun:XftFontLoadGlyphs
+   fun:XftGlyphRender
+   fun:XftDrawGlyphs
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:realloc
+   fun:ft_mem_qrealloc
+   fun:ft_mem_realloc
+   fun:FT_GlyphLoader_CheckPoints
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   fun:FT_Load_Glyph
+   fun:XftFontLoadGlyphs
+   fun:XftGlyphRender
+   fun:XftDrawGlyphs
+   fun:XftDrawString8
+   fun:_ZNK3Xft10drawStringERK9_XftColoriiRKSs
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:calloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:ft_mem_qalloc
+   fun:ft_mem_alloc
+   fun:FT_Add_Module
+   fun:FT_Add_Default_Modules
+   fun:FT_Init_FreeType
+   fun:XftInitFtLibrary
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   fun:XftFontOpenPattern
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+   fun:_ZN10XLibWindow11initGraphicEi
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcStrSetAddFilename
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcConfigBuildFonts
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:XftInit
+   fun:XftFontMatch
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   fun:FcStrSetAdd
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcDirCacheLoad
+   fun:FcDirCacheRead
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcConfigBuildFonts
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:calloc
+   fun:_XrmInternalStringToQuark
+   fun:XrmInitialize
+   obj:/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+   fun:XGetDefault
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   fun:XftDefaultHasRender
+   fun:XftDefaultSubstitute
+   fun:XftFontMatch
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:realloc
+   fun:ft_mem_qrealloc
+   fun:ft_mem_realloc
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   obj:/usr/lib/x86_64-linux-gnu/libfreetype.so.6.10.1
+   fun:FT_Load_Glyph
+   fun:XftFontLoadGlyphs
+   fun:XftGlyphRender
+   fun:XftDrawGlyphs
+   fun:XftDrawString8
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+   fun:_XrmInternalStringToQuark
+   fun:XrmInitialize
+   obj:/usr/lib/x86_64-linux-gnu/libX11.so.6.3.0
+   fun:XGetDefault
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   fun:XftDefaultHasRender
+   fun:XftDefaultSubstitute
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:realloc
+   fun:FcFontSetAdd
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:FcConfigBuildFonts
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   fun:XftInit
+   fun:XftFontMatch
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:strdup
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.7.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   obj:/lib/x86_64-linux-gnu/libexpat.so.1.6.0
+   fun:XML_ParseBuffer
+   fun:FcConfigParseAndLoad
+   fun:FcConfigParseAndLoad
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:ft_mem_qalloc
+   fun:ft_mem_alloc
+   fun:FT_New_Library
+   fun:FT_Init_FreeType
+   fun:XftInitFtLibrary
+   obj:/usr/lib/x86_64-linux-gnu/libXft.so.2.3.1
+   fun:XftFontOpenPattern
+   fun:XftFontOpenName
+   fun:_ZN3XftC1ERSt10unique_ptrI9_XDisplayPFiPS1_EEmP6VisualRKSsm
+   fun:_ZN10XLibWindow11initGraphicEi
+   fun:_ZN10XLibWindow6createEi
+}
