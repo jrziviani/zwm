@@ -257,6 +257,7 @@ void XLibDesktop::setStatusBar()
     _statusBar.setColormap(getColormap(0));
     _statusBar.setVisual(getVisual(0));
     _statusBar.create(depth(0));
+    _statusBar.setClock("");
 }
 
 void XLibDesktop::mapRequest(XEvent &e, args_t &arg)
