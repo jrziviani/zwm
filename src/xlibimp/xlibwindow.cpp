@@ -74,7 +74,7 @@ void XLibWindow::create(int depth)
                                      y(),
                                      width(),
                                      height(),
-                                     1,                              // TODO: configure border width
+                                     0,                              // TODO: configure border width
                                      0x00ff9944,                     // TODO: configure border color
                                      BlackPixel(_display.get(), 0)); // TODO: configure bg color
 

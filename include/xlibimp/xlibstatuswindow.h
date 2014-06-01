@@ -8,6 +8,9 @@
 #include "xlibwindow.h"
 #include "xft.h"
 
+#include <thread>
+#include <mutex>
+
 
 //
 // DECLARATIONS
@@ -32,16 +35,30 @@ class XLibStatusWindow : public XLibWindow
         // Initializes the graphic context.
         void initGraphic(int depth);
 
-        // Sets the active window title in the status bar.
-        void setStatusTitle(const std::string &status);
+        // Draws the active window title in the status bar.
+        void drawStatusTitle(const std::string &status);
+
+        // Draws the clock in the status bar.
+        void drawClock();
 
         // Sets the clock in the status bar
         void setClock(const std::string &format);
 
     private:
 
+        // Updates the clock every second
+        void updateClock();
+
+    private:
+
         // Xft object to draw strings in a window.
         std::unique_ptr<Xft> _xft;
+
+        // Thread to update the clock.
+        std::thread _clockThread;
+
+        // Last status string in status bar.
+        std::string _lastStatus;
 };
 
 #endif

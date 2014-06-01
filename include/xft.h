@@ -8,6 +8,8 @@
 #include <memory>
 #include <X11/Xft/Xft.h>
 
+#include "types.h"
+
 
 //
 // MACROS
@@ -46,17 +48,31 @@ class Xft
 
         ~Xft()
         {
+            // close resources used to open font
             if (_font)
             {
                 XftFontClose(_display.get(), _font);
                 _font = nullptr;
             }
 
+            // close resources used for drawing
             if (_draw)
             {
                 XftDrawDestroy(_draw);
                 _draw = nullptr;
             }
+        }
+
+        size getStringSize(const std::string& s)
+        {
+            XGlyphInfo extents;
+            XftTextExtents8(_display.get(),
+                            _font,
+                            (unsigned char *) s.c_str(),
+                            s.length(), 
+                            &extents);
+
+            return size {extents.width, extents.height};
         }
 
         // Draws a simple rectangle in the window.

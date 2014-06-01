@@ -73,13 +73,14 @@ class XLibDesktop : public IDesktop
         Visual *getVisual(int screenNumber);
 
         // Event handlers
-        void mapRequest(XEvent &e   , args_t &arg);
-        void keyPress(XEvent &e     , args_t &arg);
-        void buttonPress(XEvent &e  , args_t &arg);
+        void mapRequest   (XEvent &e, args_t &arg);
+        void keyPress     (XEvent &e, args_t &arg);
+        void buttonPress  (XEvent &e, args_t &arg);
         void buttonRelease(XEvent &e, args_t &arg);
-        void motionNotify(XEvent &e , args_t &arg);
-        void mapNotify(XEvent &e    , args_t &arg);
-        void enterNotify(XEvent &e  , args_t &arg);
+        void motionNotify (XEvent &e, args_t &arg);
+        void mapNotify    (XEvent &e, args_t &arg);
+        void enterNotify  (XEvent &e, args_t &arg);
+        void expose       (XEvent &e, args_t &arg);
 
     private:
 

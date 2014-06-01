@@ -15,4 +15,17 @@ typedef ulong keysym;
 typedef ulong whandler;
 
 
+// STRUCTS
+struct size
+{
+    int width;
+    int height;
+};
+
+struct position
+{
+    int x;
+    int y;
+};
+
 #endif

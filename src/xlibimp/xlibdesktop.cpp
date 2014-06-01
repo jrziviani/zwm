@@ -26,8 +26,10 @@ XLibDesktop::XLibDesktop(logger &logger) :
     _handlers.insert(make_pair(ButtonRelease, &XLibDesktop::buttonRelease));
     _handlers.insert(make_pair(MotionNotify,  &XLibDesktop::motionNotify));
     _handlers.insert(make_pair(MapNotify,     &XLibDesktop::mapNotify));
-    _handlers.insert(make_pair(LeaveNotify,   &XLibDesktop::enterNotify));
+    _handlers.insert(make_pair(Expose,        &XLibDesktop::expose));
+    //_handlers.insert(make_pair(LeaveNotify,   &XLibDesktop::enterNotify));
     _handlers.insert(make_pair(EnterNotify,   &XLibDesktop::enterNotify));
+    //_handlers.insert(make_pair(UnmapNotify,   &XLibDesktop::enterNotify));
 
     initRootWindow(0);
 }
@@ -351,26 +353,39 @@ void XLibDesktop::buttonRelease(XEvent &e, args_t &arg)
 
 void XLibDesktop::enterNotify(XEvent &e, args_t &arg)
 {
-    DEBUG(_logger, "Handling (focus)enter notify event: " << e.xcrossing.root);
-    DEBUG(_logger, "Handling (focus)enter notify event: " << e.xcrossing.window);
-    DEBUG(_logger, "Handling (focus)enter notify event: " << e.xcrossing.subwindow);
+    //DEBUG(_logger, "Handling (focus)enter notify event: " << e.xcrossing.root);
+    //DEBUG(_logger, "Handling (focus)enter notify event: " << e.xcrossing.window);
+    //DEBUG(_logger, "Handling (focus)enter notify event: " << e.xcrossing.subwindow);
 
     if (e.xcrossing.window == None)
     {
         ERROR(_logger, "window none");
         return;
     }
+
     XTextProperty title;
     XGetWMName(_display.get(), e.xcrossing.window, &title);
 
     if (!title.value)
+    {
+        _statusBar.drawStatusTitle("");
         return;
+    }
 
     std::string tmp((char*) title.value);
     INFO(_logger, tmp);
-    _statusBar.setStatusTitle(tmp);
+    _statusBar.drawStatusTitle(tmp);
     XFree((char*)(title.value));
 
+}
+
+void XLibDesktop::expose(XEvent &e, args_t &arg)
+{
+    //DEBUG(_logger, "Handling (focus)enter notify event: " << e.xcrossing.root);
+    //DEBUG(_logger, "Handling (focus)enter notify event: " << e.xcrossing.window);
+    //DEBUG(_logger, "Handling (focus)enter notify event: " << e.xcrossing.subwindow);
+
+    _statusBar.drawClock();
 }
 
 void XLibDesktop::mapNotify(XEvent &e, args_t &arg)
@@ -384,7 +399,7 @@ void XLibDesktop::mapNotify(XEvent &e, args_t &arg)
 
     std::string tmp((char*) title.value);
     INFO(_logger, tmp);
-    _statusBar.setStatusTitle(tmp);
+    _statusBar.drawStatusTitle(tmp);
     XFree((char*)(title.value));
 }
 
