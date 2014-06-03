@@ -12,6 +12,7 @@
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
 
+
 using namespace std;
 
 XLibDesktop::XLibDesktop(logger &logger) :
@@ -55,7 +56,7 @@ int XLibDesktop::height(int screenNumber)
     assert(_display.get() != nullptr);
     assert(screenNumber >= 0 && screenNumber < this->getNumberOfScreens());
 
-    return DisplayHeight(_display.get(), screenNumber);
+    return DisplayHeight(_display.get(), screenNumber) - _statusBar.height();
 }
 
 int XLibDesktop::depth(int screenNumber)
@@ -270,15 +271,44 @@ void XLibDesktop::mapRequest(XEvent &e, args_t &arg)
 
     XLibWindow wnd(_display);
     std::unique_ptr<XLibWindow> pWindow(new XLibWindow(_display));
-    pWindow->x(0);
-    pWindow->y(50);
-    pWindow->width(200);
-    pWindow->height(200);
+
     pWindow->parent(e.xmaprequest.parent);
     pWindow->window(e.xmaprequest.window);
-    pWindow->redraw();
-    
-    _children.insert(make_pair(e.xmaprequest.window, std::move(pWindow)));
+
+    _desktops[_currentDesktop].insert(
+            make_pair(
+                e.xmaprequest.window, 
+                std::move(pWindow)
+                )
+            );
+
+    // hit the limit per desktop
+    if (_desktops[_currentDesktop].size() >= MAX_WINDOW_PER_DESKTOP)
+        return;
+
+    std::vector<position_t> areas = getAreas(
+            width(0), 
+            height(0),
+            _desktops[_currentDesktop].size());
+
+    unsigned int i = 0;
+    for (auto &kv : _desktops[_currentDesktop])
+    {
+        kv.second->x     (areas[i].x);
+        kv.second->y     (areas[i].y);
+        kv.second->width (areas[i].w);
+        kv.second->height(areas[i].h);
+        kv.second->redraw();
+
+        std::cout << "x: " << areas[i].x
+                  << " - y: " << areas[i].y
+                  << " - w: " << areas[i].w
+                  << " - h: " << areas[i].h << std::endl;
+        ++i;
+    }
+
+    std::cout << "-----------------\n" ;
+
     DEBUG(_logger, "Exiting mapRequest..");
 }
 
@@ -306,8 +336,11 @@ void XLibDesktop::buttonPress(XEvent &e, args_t &arg)
 {
     DEBUG(_logger, "Handling button press event");
 
+    // get current active desktop
+    virtualDesktop &desktop = _desktops[_currentDesktop];
+
     // only handle registered windows
-    if (_children.find(e.xbutton.subwindow) == _children.end())
+    if (desktop.find(e.xbutton.subwindow) == desktop.end())
     {
         ERROR(_logger, "Window " 
                       << e.xbutton.subwindow
@@ -334,10 +367,10 @@ void XLibDesktop::buttonPress(XEvent &e, args_t &arg)
     }
 
     arg.windowid         = e.xbutton.subwindow;
-    arg.windowPosition.x = _children[arg.windowid]->x();
-    arg.windowPosition.y = _children[arg.windowid]->y();
-    arg.windowPosition.w = _children[arg.windowid]->width();
-    arg.windowPosition.h = _children[arg.windowid]->height();
+    arg.windowPosition.x = desktop[arg.windowid]->x();
+    arg.windowPosition.y = desktop[arg.windowid]->y();
+    arg.windowPosition.w = desktop[arg.windowid]->width();
+    arg.windowPosition.h = desktop[arg.windowid]->height();
     arg.buttonPosition.x = e.xbutton.x_root;
     arg.buttonPosition.y = e.xbutton.y_root;
     DEBUG(_logger, "exit button press");
@@ -353,10 +386,6 @@ void XLibDesktop::buttonRelease(XEvent &e, args_t &arg)
 
 void XLibDesktop::enterNotify(XEvent &e, args_t &arg)
 {
-    //DEBUG(_logger, "Handling (focus)enter notify event: " << e.xcrossing.root);
-    //DEBUG(_logger, "Handling (focus)enter notify event: " << e.xcrossing.window);
-    //DEBUG(_logger, "Handling (focus)enter notify event: " << e.xcrossing.subwindow);
-
     if (e.xcrossing.window == None)
     {
         ERROR(_logger, "window none");
@@ -381,10 +410,6 @@ void XLibDesktop::enterNotify(XEvent &e, args_t &arg)
 
 void XLibDesktop::expose(XEvent &e, args_t &arg)
 {
-    //DEBUG(_logger, "Handling (focus)enter notify event: " << e.xcrossing.root);
-    //DEBUG(_logger, "Handling (focus)enter notify event: " << e.xcrossing.window);
-    //DEBUG(_logger, "Handling (focus)enter notify event: " << e.xcrossing.subwindow);
-
     _statusBar.drawClock();
 }
 
@@ -413,10 +438,13 @@ void XLibDesktop::motionNotify(XEvent &e, args_t &arg)
 
     DEBUG(_logger, "Handling motion event");
 
-    assert(_children.find(arg.windowid) != _children.end());
+    // get current active desktop
+    virtualDesktop &desktop = _desktops[_currentDesktop];
+
+    assert(desktop.find(arg.windowid) != desktop.end());
 
     //std::cout << "mouse move\n";
-    IWindow &rWindow = *_children[arg.windowid];
+    IWindow &rWindow = *desktop[arg.windowid];
 
     int xdiff = e.xbutton.x_root - arg.buttonPosition.x;
     int ydiff = e.xbutton.y_root - arg.buttonPosition.y;
