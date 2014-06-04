@@ -215,8 +215,14 @@ class IDesktop
         using virtualDesktop = std::unordered_map<whandler, std::unique_ptr<IWindow>>;
         std::vector<virtualDesktop> _desktops;
 
-        // desktop currently active.
+        // Desktop currently active.
         int _currentDesktop;
+
+        // Screen number
+        int _screenNumber;
+
+        // Size of the screen
+        size _screenSize; 
 
     private:
 

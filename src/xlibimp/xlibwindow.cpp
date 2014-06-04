@@ -59,7 +59,7 @@ void XLibWindow::redraw()
     // important to let the desktop knows when this window object receives
     // the focus, so the status bar can be updated.
     // TODO: remove XSelectInput from here, a new method must be created.
-    XSelectInput(_display.get(), window(), EnterWindowMask | KeyPressMask);
+    //XSelectInput(_display.get(), window(), EnterWindowMask | KeyPressMask);
 }
 
 void XLibWindow::create(int depth)

@@ -15,6 +15,8 @@
 
 using namespace std;
 
+// TODO: fix all code regarding position/size to use class properties
+//       instead of always poking XLib.
 XLibDesktop::XLibDesktop(logger &logger) :
     IDesktop   (logger),
     _display   {XOpenDisplay(0x0), &XCloseDisplay},
@@ -32,7 +34,8 @@ XLibDesktop::XLibDesktop(logger &logger) :
     _handlers.insert(make_pair(EnterNotify,   &XLibDesktop::enterNotify));
     //_handlers.insert(make_pair(UnmapNotify,   &XLibDesktop::enterNotify));
 
-    initRootWindow(0);
+    _screenNumber = 0;
+    initRootWindow(_screenNumber);
 }
 
 XLibDesktop::~XLibDesktop()
@@ -119,7 +122,7 @@ void XLibDesktop::initRootWindow(int screenNumber)
     XGrabButton(_display.get(),
                 1,
                 Mod1Mask,
-                DefaultRootWindow(_display.get()),
+                _window,
                 True,
                 ButtonPressMask|ButtonReleaseMask|PointerMotionMask,
                 GrabModeAsync,
@@ -131,7 +134,7 @@ void XLibDesktop::initRootWindow(int screenNumber)
     XGrabButton(_display.get(),
                 3,
                 Mod1Mask,
-                DefaultRootWindow(_display.get()),
+                _window,
                 True,
                 ButtonPressMask|ButtonReleaseMask|PointerMotionMask,
                 GrabModeAsync,
@@ -143,18 +146,45 @@ void XLibDesktop::initRootWindow(int screenNumber)
     setAccelKeys();
 }
 
+int updatenumlockmask(Display* dpy) {
+  unsigned int i;
+  int j;
+  XModifierKeymap *modmap;
+
+  int numlockmask = 0;
+//  this->numlockmask = 0;
+  modmap = XGetModifierMapping(dpy);
+  for(i = 0; i < 8; i++)
+    for(j = 0; j < modmap->max_keypermod; j++)
+      if(modmap->modifiermap[i * modmap->max_keypermod + j] == XKeysymToKeycode(dpy, XK_Num_Lock))
+//        this->numlockmask = (1 << i);
+          numlockmask = (1 << i);
+  XFreeModifiermap(modmap);
+  return numlockmask;
+}
+
 void XLibDesktop::setAccelKeys()
 {
+  unsigned int numlockmask = updatenumlockmask(_display.get());
+  { // update numlockmask first!
+    unsigned int i;
+    unsigned int modifiers[] = { 0, LockMask, numlockmask, numlockmask|LockMask };
+    XUngrabKey(_display.get(), AnyKey, AnyModifier, _window);
+
     for (KeyMap k : _keyMaps)
     {
+      for(i = 0; i < 4; i++) {
+
         XGrabKey(_display.get(),
                  XKeysymToKeycode(_display.get(), k.getKey()),
-                 k.getMod1(),
+                 k.getMod1() | modifiers[i],
                  _window,
                  True,
                  GrabModeAsync,
                  GrabModeAsync);
+      }
     }
+  }
 }
 
 Window XLibDesktop::getWindowByPID(unsigned long pid)
@@ -274,6 +304,12 @@ void XLibDesktop::mapRequest(XEvent &e, args_t &arg)
 
     pWindow->parent(e.xmaprequest.parent);
     pWindow->window(e.xmaprequest.window);
+    XSelectInput(_display.get(),
+                 e.xmaprequest.window,
+                 EnterWindowMask |
+                 FocusChangeMask |
+                 PropertyChangeMask |
+                 StructureNotifyMask);
 
     _desktops[_currentDesktop].insert(
             make_pair(
@@ -287,15 +323,20 @@ void XLibDesktop::mapRequest(XEvent &e, args_t &arg)
         return;
 
     std::vector<position_t> areas = getAreas(
-            width(0), 
-            height(0),
+            width(_screenNumber), 
+            height(_screenNumber),
             _desktops[_currentDesktop].size());
 
     unsigned int i = 0;
     for (auto &kv : _desktops[_currentDesktop])
     {
+        // fix small rounding errors and discount the status
+        // bar size
+        if (areas[i].y < 10)
+            areas[i].y = 0;
+
         kv.second->x     (areas[i].x);
-        kv.second->y     (areas[i].y);
+        kv.second->y     (areas[i].y + _statusBar.height());
         kv.second->width (areas[i].w);
         kv.second->height(areas[i].h);
         kv.second->redraw();
