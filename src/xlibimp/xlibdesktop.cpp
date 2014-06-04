@@ -25,6 +25,7 @@ XLibDesktop::XLibDesktop(logger &logger) :
 {
     _handlers.insert(make_pair(MapRequest,    &XLibDesktop::mapRequest));
     _handlers.insert(make_pair(KeyPress,      &XLibDesktop::keyPress));
+    _handlers.insert(make_pair(KeyRelease,    &XLibDesktop::keyPress));
     _handlers.insert(make_pair(ButtonPress,   &XLibDesktop::buttonPress));
     _handlers.insert(make_pair(ButtonRelease, &XLibDesktop::buttonRelease));
     _handlers.insert(make_pair(MotionNotify,  &XLibDesktop::motionNotify));
@@ -33,6 +34,7 @@ XLibDesktop::XLibDesktop(logger &logger) :
     //_handlers.insert(make_pair(LeaveNotify,   &XLibDesktop::enterNotify));
     _handlers.insert(make_pair(EnterNotify,   &XLibDesktop::enterNotify));
     //_handlers.insert(make_pair(UnmapNotify,   &XLibDesktop::enterNotify));
+    _handlers.insert(make_pair(MappingNotify,   &XLibDesktop::mappingNotify));
 
     _screenNumber = 0;
     initRootWindow(_screenNumber);
@@ -163,28 +165,48 @@ int updatenumlockmask(Display* dpy) {
   return numlockmask;
 }
 
+unsigned int NumlockMask(Display *display)
+{
+	XModifierKeymap *modifierKeymap;
+	modifierKeymap = XGetModifierMapping(display);
+
+	unsigned int numlockMask = 0;
+	for(int i = 0; i < 8; i++)
+    {
+		for(int j = 0; j < modifierKeymap->max_keypermod; j++)
+        {
+			if(modifierKeymap->modifiermap[i * modifierKeymap->max_keypermod
+                                           + j]
+			   == XKeysymToKeycode(display, XK_Num_Lock))
+            {
+				numlockMask = (1 << i);
+            }
+        }
+    }
+	XFreeModifiermap(modifierKeymap);
+
+    return numlockMask;
+}
+
 void XLibDesktop::setAccelKeys()
 {
-  unsigned int numlockmask = updatenumlockmask(_display.get());
-  { // update numlockmask first!
-    unsigned int i;
-    unsigned int modifiers[] = { 0, LockMask, numlockmask, numlockmask|LockMask };
-    XUngrabKey(_display.get(), AnyKey, AnyModifier, _window);
+    XUngrabButton(_display.get(), AnyButton, AnyModifier, _window);
+
+    unsigned int numlockMask = NumlockMask(_display.get());
+    unsigned int modifiers[] = {0, LockMask, numlockMask,
+                                numlockMask | LockMask};
+    unsigned int buttons[] = {Button1, Button3};
 
     for (KeyMap k : _keyMaps)
     {
-      for(i = 0; i < 4; i++) {
-
         XGrabKey(_display.get(),
                  XKeysymToKeycode(_display.get(), k.getKey()),
-                 k.getMod1() | modifiers[i],
+                 /*k.getMod1() | modifiers[i]*/ AnyModifier,
                  _window,
                  True,
                  GrabModeAsync,
                  GrabModeAsync);
-      }
     }
-  }
 }
 
 Window XLibDesktop::getWindowByPID(unsigned long pid)
@@ -309,6 +331,8 @@ void XLibDesktop::mapRequest(XEvent &e, args_t &arg)
                  EnterWindowMask |
                  FocusChangeMask |
                  PropertyChangeMask |
+                 KeyPressMask |
+                 KeyReleaseMask |
                  StructureNotifyMask);
 
     _desktops[_currentDesktop].insert(
@@ -357,6 +381,18 @@ void XLibDesktop::keyPress(XEvent &e, args_t &arg)
 {
     DEBUG(_logger, "Handling key press event");
 
+    std::cout << "Wnd pressed: " << e.xkey.subwindow << std::endl;
+
+    if (e.type == KeyRelease) {
+        return;
+    }
+
+    if (e.xkey.subwindow != None)
+    {
+        std::cout << "here...\n";
+        XRaiseWindow(_display.get(), e.xkey.subwindow);
+    }
+
     for (KeyMap k : _keyMaps)
     {
         if (XKeysymToKeycode(_display.get(), k.getKey()) == e.xkey.keycode &&
@@ -369,6 +405,7 @@ void XLibDesktop::keyPress(XEvent &e, args_t &arg)
             }
             INFO(_logger, "Starting program " << k.getProgram());
             helper::callProgramBg(k.getProgram().c_str());
+            return;
         }
     }
 }
@@ -513,5 +550,18 @@ void XLibDesktop::motionNotify(XEvent &e, args_t &arg)
                        << " x "
                        << arg.buttonPosition.y + ydiff
                        << ")");
+    }
+}
+
+void XLibDesktop::mappingNotify(XEvent &e, args_t &arg)
+{
+    std::cout << "mapping notify\n";
+
+    XRefreshKeyboardMapping(&e.xmapping);
+
+    if(e.xmapping.request == MappingKeyboard)
+    {
+        std::cout << "accel keys...\n";
+        setAccelKeys();
     }
 }
