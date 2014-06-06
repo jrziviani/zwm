@@ -148,23 +148,6 @@ void XLibDesktop::initRootWindow(int screenNumber)
     setAccelKeys();
 }
 
-int updatenumlockmask(Display* dpy) {
-  unsigned int i;
-  int j;
-  XModifierKeymap *modmap;
-
-  int numlockmask = 0;
-//  this->numlockmask = 0;
-  modmap = XGetModifierMapping(dpy);
-  for(i = 0; i < 8; i++)
-    for(j = 0; j < modmap->max_keypermod; j++)
-      if(modmap->modifiermap[i * modmap->max_keypermod + j] == XKeysymToKeycode(dpy, XK_Num_Lock))
-//        this->numlockmask = (1 << i);
-          numlockmask = (1 << i);
-  XFreeModifiermap(modmap);
-  return numlockmask;
-}
-
 unsigned int NumlockMask(Display *display)
 {
 	XModifierKeymap *modifierKeymap;
@@ -321,6 +304,10 @@ void XLibDesktop::mapRequest(XEvent &e, args_t &arg)
     DEBUG(_logger, "Event type: " << e.type);
     DEBUG(_logger, "Window ID: " << e.xmaprequest.window);
 
+    // hit the limit per desktop
+    if (_desktops[_currentDesktop].size() >= MAX_WINDOW_PER_DESKTOP)
+        return;
+
     XLibWindow wnd(_display);
     std::unique_ptr<XLibWindow> pWindow(new XLibWindow(_display));
 
@@ -341,10 +328,6 @@ void XLibDesktop::mapRequest(XEvent &e, args_t &arg)
                 std::move(pWindow)
                 )
             );
-
-    // hit the limit per desktop
-    if (_desktops[_currentDesktop].size() >= MAX_WINDOW_PER_DESKTOP)
-        return;
 
     std::vector<position_t> areas = getAreas(
             width(_screenNumber), 
@@ -369,6 +352,8 @@ void XLibDesktop::mapRequest(XEvent &e, args_t &arg)
                   << " - y: " << areas[i].y
                   << " - w: " << areas[i].w
                   << " - h: " << areas[i].h << std::endl;
+
+        XRaiseWindow(_display.get(), kv.second->window());
         ++i;
     }
 
@@ -488,7 +473,15 @@ void XLibDesktop::enterNotify(XEvent &e, args_t &arg)
 
 void XLibDesktop::expose(XEvent &e, args_t &arg)
 {
+    while(XCheckTypedEvent(_display.get(), MotionNotify, &e));
+
     _statusBar.drawClock();
+
+    for (auto &kv : _desktops[_currentDesktop])
+    {
+        kv.second->redraw();
+        XRaiseWindow(_display.get(), kv.second->window());
+    }
 }
 
 void XLibDesktop::mapNotify(XEvent &e, args_t &arg)
