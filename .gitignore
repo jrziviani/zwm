@@ -1,2 +1,16 @@
 build/
 main
+Makefile
+Makefile.in
+aclocal.m4
+autom4te.cache/
+config.h
+config.log
+config.status
+depcomp
+install-sh
+missing
+src/.deps/
+src/.dirstamp
+src/xlibimp/.deps/
+src/xlibimp/.dirstamp
