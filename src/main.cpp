@@ -15,6 +15,7 @@ KeyMaps maps {
     KeyMap { XStringToKeysym("F1"), Mod1Mask, 0, "xterm" },
     KeyMap { XStringToKeysym("F2"), Mod1Mask, 0, "gnome-calculator" },
     KeyMap { XStringToKeysym("F3"), Mod1Mask, 0, "gnome-terminal" },
+    KeyMap { XStringToKeysym("F4"), Mod1Mask, 0, "firefox" },
     KeyMap { XStringToKeysym("Q"), Mod1Mask, 0, "quit" }
 };
 

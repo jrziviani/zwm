@@ -82,6 +82,9 @@ class XLibDesktop : public IDesktop
         void enterNotify  (XEvent &e, args_t &arg);
         void expose       (XEvent &e, args_t &arg);
         void mappingNotify(XEvent &e, args_t &arg);
+        void destroyNotify(XEvent &e, args_t &arg);
+        void configureRequest(XEvent &e, args_t &arg);
+        void clientMessage(XEvent &e, args_t &arg);
 
     private:
 

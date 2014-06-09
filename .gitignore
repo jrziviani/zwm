@@ -14,3 +14,4 @@ src/.deps/
 src/.dirstamp
 src/xlibimp/.deps/
 src/xlibimp/.dirstamp
+*.o

@@ -12,6 +12,8 @@ AC_CHECK_HEADERS([iostream])
 ZWM_INCLUDES=""
 ZWM_LIBS=""
 
+CXXFLAGS=-g3 -O0
+
 AC_CHECK_LIB([X11], [XOpenDisplay], [], [
          echo "X11 lib is required"
          exit -1])

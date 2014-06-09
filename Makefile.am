@@ -6,6 +6,8 @@ AM_CPPFLAGS= \
 			 $(ZWM_INCLUDES) \
 			 -std=c++11
 
+CXXFLAGS=-g3 -O0
+
 main_SOURCES = \
 	src/keymap.cpp \
 	src/helper.cpp \

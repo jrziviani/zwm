@@ -46,14 +46,22 @@ void XLibWindow::redraw()
 {
     assert(_display.get() != nullptr);
 
+    XMoveResizeWindow(_display.get(), 
+                      window(),
+                      x(),
+                      y(),
+                      width(),
+                      height());
+
+    XMapWindow(_display.get(), window());
     // updates the place if needed.
-    move(x(), y());
+    // move(x(), y());
 
     // updates the size if needed.
-    resize(width(), height());
+    // resize(width(), height());
 
     // show the window.
-    XMapWindow(_display.get(), window());
+    //XMapWindow(_display.get(), window());
 
     // register the window to receive EnterWindow event, this is specially
     // important to let the desktop knows when this window object receives
