@@ -35,10 +35,10 @@ XLibDesktop::XLibDesktop(logger &logger) :
     _handlers.insert(make_pair(MapRequest,       &XLibDesktop::mapRequest));
     _handlers.insert(make_pair(KeyPress,         &XLibDesktop::keyPress));
     _handlers.insert(make_pair(MappingNotify,    &XLibDesktop::mappingNotify));
+    _handlers.insert(make_pair(ConfigureNotify,  &XLibDesktop::configureNotify));
     _handlers.insert(make_pair(ConfigureRequest, &XLibDesktop::configureRequest));
     _handlers.insert(make_pair(DestroyNotify,    &XLibDesktop::destroyNotify));
     _handlers.insert(make_pair(ClientMessage,    &XLibDesktop::clientMessage));
-    _handlers.insert(make_pair(ConfigureNotify, &XLibDesktop::configureRequest));
 
     _screenNumber = 0;
     initRootWindow(_screenNumber);
@@ -292,6 +292,34 @@ void XLibDesktop::loop()
     }
 }
 
+void XLibDesktop::tiling()
+{
+    // get where the windows will be located and their size
+    // in the screen based on how many windows must be displayed.
+    std::vector<position_t> areas = getAreas(
+        width(_screenNumber),
+        height(_screenNumber),
+        _desktops[_currentDesktop].size());
+
+    unsigned int i = 0;
+    for (auto &kv : _desktops[_currentDesktop])
+    {
+        // fix small rounding errors and discount the status
+        // bar size.
+        if (areas[i].y < 10)
+            areas[i].y = 0;
+        
+        // set place/size and draw (map) the window.
+        kv.second->x     (areas[i].x);
+        kv.second->y     (areas[i].y);
+        kv.second->width (areas[i].w);
+        kv.second->height(areas[i].h);
+        kv.second->redraw();
+
+        ++i;
+    }
+}
+
 void XLibDesktop::setStatusBar()
 {
     /*_statusBar.x(0);
@@ -313,142 +341,86 @@ void XLibDesktop::mapRequest(XEvent &e, args_t &arg)
     std::cout << e.xmaprequest.window << std::endl;
 
     // for now, only map from desktop.
-   /* if (e.xmaprequest.parent != _window)
-        return;*/
+    if (e.xmaprequest.parent != _window)
+        return;
 
     XWindowAttributes attributes;
 
-    if(!XGetWindowAttributes(_display.get(), e.xmaprequest.window,
+    // return when we cannot get window attributes.
+    // TODO: investigate when this situation could happen (exit then?).
+    if(!XGetWindowAttributes(_display.get(), 
+                             e.xmaprequest.window, 
                              &attributes))
-    {
         return;
-    }
 
+    // do not map windows that asked for it.
     if(attributes.override_redirect)
-    {
         return;
-    }
-
-
     
     // dont duplicate a window.
-    if (_desktops[_currentDesktop].find(e.xmaprequest.window) != _desktops[_currentDesktop].end()
-        || e.xmaprequest.parent != _window)
-    {
+    if (_desktops[_currentDesktop].find(e.xmaprequest.window) 
+            != _desktops[_currentDesktop].end())
         return;
-    }
 
-        XLibWindow wnd(_display);
-        std::unique_ptr<XLibWindow> pWindow(new XLibWindow(_display));
+    XLibWindow wnd(_display);
+    std::unique_ptr<XLibWindow> pWindow(new XLibWindow(_display));
 
-        // TODO: we limit the number of programs opened by virtual
-        // desktop but we should handle window children (like config
-        // screens, popups, etc).. should it be opened floating?
+    // TODO: we limit the number of programs opened by virtual
+    // desktop but we should handle window children (like config
+    // screens, popups, etc).. should it be opened floating?
 
-        pWindow->parent(e.xmaprequest.parent);
-        pWindow->window(e.xmaprequest.window);
+    pWindow->parent(e.xmaprequest.parent);
+    pWindow->window(e.xmaprequest.window);
 
-        // TODO: this setup should have been managed by pWindow.
-        XSelectInput(_display.get(),
-                     e.xmaprequest.window,
-                     EnterWindowMask |
-                     FocusChangeMask |
-                     StructureNotifyMask);
+    // TODO: this setup should have been managed by pWindow.
+    /*XSelectInput(_display.get(),
+                 e.xmaprequest.window,
+                 EnterWindowMask |
+                 FocusChangeMask |
+                 ButtonPressMask |
+                 StructureNotifyMask);*/
 
-        XSetWindowBorderWidth(_display.get(),  e.xmaprequest.window, 1);
+    // set the border width.
+    XSetWindowBorderWidth(_display.get(),  e.xmaprequest.window, 1);
 
-        XSizeHints hints;
-        long longjunk;
-        XGetWMNormalHints(_display.get(), e.xmaprequest.window, &hints, &longjunk);
-        std::cout << "\n => HINT H: " << hints.height_inc << std::endl;
-        std::cout << "\n => HINT W: " << hints.width_inc << std::endl;
-        std::cout << "\n => HINT G: " << hints.win_gravity << std::endl;
-        std::cout << "\n => HINT BW: " << hints.base_width << std::endl;
-        std::cout << "\n => HINT BH: " << hints.base_height << std::endl;
-        std::cout << "\n => HINT MIN ASP X: " << hints.min_aspect.x << std::endl;
-        std::cout << "\n => HINT MIN ASP Y: " << hints.min_aspect.y << std::endl;
-        std::cout << "\n => HINT MAX ASP X: " << hints.max_aspect.x << std::endl;
-        std::cout << "\n => HINT MAX ASP Y: " << hints.max_aspect.y << std::endl;
+    // add the window in the current virtual desktop.
+    _desktops[_currentDesktop].insert(
+            make_pair(
+                e.xmaprequest.window, 
+                std::move(pWindow)
+                )
+            );
 
-        /*hints.height_inc = 1;
-        hints.min_height = 1;
-        hints.base_height = 1;
-        XSetWMNormalHints(_display.get(),  e.xmaprequest.window, &hints);*/
+    // disable request processing for now.
+    XGrabServer(_display.get());
 
-        // add the window in the current virtual desktop.
-        _desktops[_currentDesktop].insert(
-                make_pair(
-                    e.xmaprequest.window, 
-                    std::move(pWindow)
-                    )
-                );
+    // map the window and bring it to the top of the stack.
+    XRaiseWindow(_display.get(), e.xmaprequest.window);
 
-        XGrabServer(_display.get());
-        XRaiseWindow(_display.get(), e.xmaprequest.window);
-        XSync(_display.get(), True);
-        XEvent configureEvent;
-        configureEvent.type = ConfigureRequest;
-        configureEvent.xconfigurerequest.window = e.xmaprequest.window;
-        configureEvent.xconfigurerequest.width = 100;
-        configureEvent.xconfigurerequest.height = 100;
-        configureEvent.xconfigurerequest.value_mask = CWWidth | CWHeight;
-        XSendEvent(_display.get(), 
-                   _window, 
-                   SubstructureRedirectMask,
-                   True,
-                   &configureEvent);
-        XSync(_display.get(), False);
-        XUngrabServer(_display.get());
-        return;
-    //return;
-    // given the number of windows to be displayed, get the
-    // place (position/size) of each one based on screen width/height.
-    std::vector<position_t> areas = getAreas(
-            /*width(_screenNumber)*/1024, 
-            /*height(_screenNumber)*/768,
-            _desktops[_currentDesktop].size());
+    // flush the x buffer (discards all events in queue).
+    XSync(_display.get(), True);
 
+    // as soon as we map the window we need to force windows to be
+    // tiled, this is done by ConfigureModify event (triggered by this
+    // ConfigureRequest).
+    XEvent configureEvent;
+    configureEvent.type = ConfigureRequest;
+    configureEvent.xconfigurerequest.window = e.xmaprequest.window;
+    configureEvent.xconfigurerequest.width = 1;
+    configureEvent.xconfigurerequest.height = 1;
+    configureEvent.xconfigurerequest.value_mask = CWWidth | CWHeight;
 
-    unsigned int i = 0;
-    int x = 0;
-    for (auto &kv : _desktops[_currentDesktop])
-    {
-        // fix small rounding errors and discount the status
-        // bar size
-        if (areas[i].y < 10)
-            areas[i].y = 0;
+    XSendEvent(_display.get(), 
+               _window, 
+               SubstructureRedirectMask,
+               True,
+               &configureEvent);
 
-        /*XMoveResizeWindow(_display.get(),
-                kv.first,
-                areas[i].x,
-                areas[i].y,
-                areas[i].w,
-                areas[i].h);
-*/
-        int tmpx = areas[i].w % 8;
-        kv.second->x(areas[i].x);
-        kv.second->y(areas[i].y);
-        kv.second->width( areas[i].w + tmpx );
-        kv.second->height(areas[i].h + (areas[i].h % 17));
-        kv.second->redraw();
+    // flush the buffer but now we want our events untouched
+    XSync(_display.get(), False);
 
-        /*XMoveResizeWindow(_display.get(), 
-              kv.first,
-              0,
-              i * x,
-              width(_screenNumber),
-              height(_screenNumber) / _desktops[_currentDesktop].size());
-
-        x = height(_screenNumber) / _desktops[_currentDesktop].size();*/
-
-        ++i;
-    }
-
-    //XSetInputFocus(_display.get(), e.xmaprequest.window, RevertToPointerRoot, CurrentTime);
-
-
-    return;
-
+    // release the request processing
+    XUngrabServer(_display.get());
 }
 
 void XLibDesktop::keyPress(XEvent &e, args_t &arg)
@@ -577,12 +549,6 @@ void XLibDesktop::expose(XEvent &e, args_t &arg)
 {
     while(XCheckTypedEvent(_display.get(), MotionNotify, &e));
 
-    if(XCheckTypedWindowEvent(_display.get(), 
-                e.xconfigure.window, ConfigureNotify, &e ) )
-    {
-        std::cout << "\nEstou aqui...\n";
-
-    }
     //_statusBar.drawClock();*/
 }
 
@@ -664,37 +630,16 @@ void XLibDesktop::mappingNotify(XEvent &e, args_t &arg)
 
 void XLibDesktop::destroyNotify(XEvent &e, args_t &arg)
 {
+    // ignore event if the window destroyed is not mapped.
     virtualDesktop &desktop = _desktops[_currentDesktop];
     if (desktop.find(e.xdestroywindow.window) == desktop.end())
         return;
 
+    // remove the window from the array.
     desktop.erase(e.xdestroywindow.window);
 
-    // given the number of windows to be displayed, get the
-    // place (position/size) of each one based on screen width/height.
-    std::vector<position_t> areas = getAreas(
-            width(_screenNumber), 
-            height(_screenNumber),
-            _desktops[_currentDesktop].size());
-
-
-    unsigned int i = 0;
-    for (auto &kv : _desktops[_currentDesktop])
-    {
-        // fix small rounding errors and discount the status
-        // bar size
-        if (areas[0].y < 10)
-            areas[0].y = 0;
-
-        XMoveResizeWindow(_display.get(), 
-              kv.first,
-              areas[i].x,
-              areas[i].y,
-              width(_screenNumber) / _desktops[_currentDesktop].size(),
-              height(_screenNumber));
-
-        ++i;
-    }
+    // organize the windows
+    tiling();
 }
 
 void XLibDesktop::clientMessage(XEvent &e, args_t &arg)
@@ -713,60 +658,29 @@ void XLibDesktop::clientMessage(XEvent &e, args_t &arg)
     std::cout << "====================" << std::endl;
 }
 
-void XLibDesktop::configureRequest(XEvent &e, args_t &arg)
+void XLibDesktop::configureNotify(XEvent &e, args_t &arg)
 {
+    // compress repeated events.
+    while(XCheckTypedWindowEvent(_display.get(), e.xconfigure.window, ConfigureNotify, &e));
+
+    // ignore events for windows not mapped yet
     virtualDesktop &desktop = _desktops[_currentDesktop];
-
-    if (e.type == ConfigureNotify)
+    if (desktop.find(e.xconfigure.window) == desktop.end())
     {
-        while(XCheckTypedWindowEvent(_display.get(), e.xconfigure.window, ConfigureNotify, &e));
-
-        if (desktop.find(e.xconfigure.window) == desktop.end())
-        {
-            std::cout << "not found.. ";
-            return;
-        }
-
-        DEBUG(_logger, "ConfigureNotify: " << e.xconfigure.window);
-        DEBUG(_logger, "event: " << e.xconfigure.event);
-        DEBUG(_logger, "above: " << e.xconfigure.above);
-
-        if (e.xconfigure.event == _window)
-        {
-            std::vector<position_t> areas = getAreas(
-                /*width(_screenNumber)*/1024, 
-                /*height(_screenNumber)*/768,
-                _desktops[_currentDesktop].size());
-
-            unsigned int i = 0;
-            for (auto &kv : _desktops[_currentDesktop])
-            {
-                // fix small rounding errors and discount the status
-                // bar size
-                if (areas[i].y < 10)
-                    areas[i].y = 0;
-                
-                kv.second->x(areas[i].x);
-                kv.second->y(areas[i].y);
-                kv.second->width( areas[i].w);
-                kv.second->height(areas[i].h);
-                kv.second->redraw();
-
-                ++i;
-            }
-        }
-        DEBUG(_logger, "override: " << e.xconfigure.override_redirect);
-
+        DEBUG(_logger, "Window is not mapped yet");
         return;
     }
 
-    DEBUG(_logger, "ConfigureRequest: " << e.xconfigurerequest.window);
-    DEBUG(_logger, "x: " << e.xconfigurerequest.x);
-    DEBUG(_logger, "y: " << e.xconfigurerequest.y);
-    DEBUG(_logger, "w: " << e.xconfigurerequest.width);
-    DEBUG(_logger, "h: " << e.xconfigurerequest.height);
-    DEBUG(_logger, "------------------------");
+    // ignore configure notify not fired from the desktop
+    if (e.xconfigure.event != _window)
+        return;
 
+    // organize the windows
+    tiling();
+}
+
+void XLibDesktop::configureRequest(XEvent &e, args_t &arg)
+{
     XWindowChanges changes;
     changes.x            = e.xconfigurerequest.x;
     changes.y            = e.xconfigurerequest.y;
