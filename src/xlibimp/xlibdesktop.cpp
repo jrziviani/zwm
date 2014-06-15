@@ -30,7 +30,7 @@ XLibDesktop::XLibDesktop(logger &logger) :
     _handlers.insert(make_pair(Expose,        &XLibDesktop::expose));
     //_handlers.insert(make_pair(LeaveNotify,   &XLibDesktop::enterNotify));
     //_handlers.insert(make_pair(EnterNotify,   &XLibDesktop::enterNotify));
-    //_handlers.insert(make_pair(UnmapNotify,   &XLibDesktop::enterNotify));
+    _handlers.insert(make_pair(UnmapNotify,   &XLibDesktop::enterNotify));
 
     _handlers.insert(make_pair(MapRequest,       &XLibDesktop::mapRequest));
     _handlers.insert(make_pair(KeyPress,         &XLibDesktop::keyPress));
@@ -362,6 +362,20 @@ void XLibDesktop::mapRequest(XEvent &e, args_t &arg)
             != _desktops[_currentDesktop].end())
         return;
 
+    Window transient;
+    XGetTransientForHint(_display.get(),
+                         e.xmaprequest.window,
+                         &transient);
+
+    // when opening a transient window we don't tile it but
+    // simply open using its default setup.
+    if (transient != None)
+    {
+        XSetWindowBorderWidth(_display.get(),  e.xmaprequest.window, 1);
+        XMapRaised(_display.get(), e.xmaprequest.window);
+        return;
+    }
+
     XLibWindow wnd(_display);
     std::unique_ptr<XLibWindow> pWindow(new XLibWindow(_display));
 
@@ -481,13 +495,6 @@ void XLibDesktop::buttonPress(XEvent &e, args_t &arg)
 
     XRaiseWindow(_display.get(), e.xbutton.subwindow);
 
-    XEvent evt;
-    evt.type = ConfigureRequest;
-    evt.xconfigurerequest.x = 1;
-    evt.xconfigurerequest.y = 1;
-    evt.xconfigurerequest.border_width = 1;
-    evt.xconfigurerequest.value_mask = CWX | CWY;
-    XSendEvent(_display.get(), e.xbutton.window, False, SubstructureRedirectMask, &evt);
     switch (e.xbutton.button)
     {
         case 1:
@@ -547,7 +554,7 @@ void XLibDesktop::enterNotify(XEvent &e, args_t &arg)
 
 void XLibDesktop::expose(XEvent &e, args_t &arg)
 {
-    while(XCheckTypedEvent(_display.get(), MotionNotify, &e));
+    // while(XCheckTypedEvent(_display.get(), MotionNotify, &e));
 
     //_statusBar.drawClock();*/
 }
@@ -644,6 +651,7 @@ void XLibDesktop::destroyNotify(XEvent &e, args_t &arg)
 
 void XLibDesktop::clientMessage(XEvent &e, args_t &arg)
 {
+    /*
     std::cout << "---------------------\n";
     std::cout << "Client Message" << std::endl;
     std::cout << "atom: " << XGetAtomName(_display.get(), e.xclient.message_type) << std::endl;
@@ -656,6 +664,7 @@ void XLibDesktop::clientMessage(XEvent &e, args_t &arg)
     std::cout << "data: " << e.xclient.data.l[3] << std::endl;
     std::cout << "data: " << e.xclient.data.l[4] << std::endl;
     std::cout << "====================" << std::endl;
+    */
 }
 
 void XLibDesktop::configureNotify(XEvent &e, args_t &arg)
