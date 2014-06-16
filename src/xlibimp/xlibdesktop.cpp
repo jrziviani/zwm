@@ -27,10 +27,10 @@ XLibDesktop::XLibDesktop(logger &logger) :
     _handlers.insert(make_pair(ButtonRelease, &XLibDesktop::buttonRelease));
     _handlers.insert(make_pair(MotionNotify,  &XLibDesktop::motionNotify));
     //_handlers.insert(make_pair(MapNotify,     &XLibDesktop::mapNotify));
-    _handlers.insert(make_pair(Expose,        &XLibDesktop::expose));
+    //_handlers.insert(make_pair(Expose,        &XLibDesktop::expose));
     //_handlers.insert(make_pair(LeaveNotify,   &XLibDesktop::enterNotify));
     //_handlers.insert(make_pair(EnterNotify,   &XLibDesktop::enterNotify));
-    _handlers.insert(make_pair(UnmapNotify,   &XLibDesktop::enterNotify));
+    //_handlers.insert(make_pair(UnmapNotify,   &XLibDesktop::enterNotify));
 
     _handlers.insert(make_pair(MapRequest,       &XLibDesktop::mapRequest));
     _handlers.insert(make_pair(KeyPress,         &XLibDesktop::keyPress));
@@ -38,7 +38,7 @@ XLibDesktop::XLibDesktop(logger &logger) :
     _handlers.insert(make_pair(ConfigureNotify,  &XLibDesktop::configureNotify));
     _handlers.insert(make_pair(ConfigureRequest, &XLibDesktop::configureRequest));
     _handlers.insert(make_pair(DestroyNotify,    &XLibDesktop::destroyNotify));
-    _handlers.insert(make_pair(ClientMessage,    &XLibDesktop::clientMessage));
+    //_handlers.insert(make_pair(ClientMessage,    &XLibDesktop::clientMessage));
 
     _screenNumber = 0;
     initRootWindow(_screenNumber);
@@ -113,43 +113,19 @@ void XLibDesktop::initRootWindow(int screenNumber)
 
     // choose the events we want to handle
     XSelectInput(_display.get(), _window, SubstructureRedirectMask |
-                                          FocusChangeMask |
-                                          VisibilityChangeMask |
+                                          //FocusChangeMask |
+                                          //VisibilityChangeMask |
                                           SubstructureNotifyMask |
-                                          ButtonPressMask |
-                                          EnterWindowMask |
-                                          LeaveWindowMask |
-                                          StructureNotifyMask |
-                                          PropertyChangeMask |
-                                          ExposureMask |
+                                          //ButtonPressMask |
+                                          //EnterWindowMask |
+                                          //LeaveWindowMask |
+                                          //StructureNotifyMask |
+                                          //PropertyChangeMask |
+                                          //ExposureMask |
                                           KeyPressMask);
 
-    // grab the mouse left button
-    XGrabButton(_display.get(),
-                1,
-                Mod1Mask,
-                _window,
-                True,
-                ButtonPressMask|ButtonReleaseMask|PointerMotionMask,
-                GrabModeAsync,
-                GrabModeAsync,
-                None,
-                None);
-
-    // grab the mouse right button
-    XGrabButton(_display.get(),
-                3,
-                Mod1Mask,
-                _window,
-                True,
-                ButtonPressMask|ButtonReleaseMask|PointerMotionMask,
-                GrabModeAsync,
-                GrabModeAsync,
-                None,
-                None);
-
-    setStatusBar();
     setAccelKeys();
+    setStatusBar();
 }
 
 unsigned int NumlockMask(Display *display)
@@ -187,12 +163,37 @@ void XLibDesktop::setAccelKeys()
     {
         XGrabKey(_display.get(),
                  XKeysymToKeycode(_display.get(), k.getKey()),
-                 /*k.getMod1() | modifiers[i]*/ AnyModifier,
+                 AnyModifier,
                  _window,
                  True,
                  GrabModeAsync,
                  GrabModeAsync);
     }
+
+    // grab the mouse left button
+    XGrabButton(_display.get(),
+                1,
+                Mod1Mask,
+                _window,
+                True,
+                ButtonPressMask|ButtonReleaseMask|PointerMotionMask,
+                GrabModeAsync,
+                GrabModeAsync,
+                None,
+                None);
+
+    // grab the mouse right button
+    XGrabButton(_display.get(),
+                3,
+                Mod1Mask,
+                _window,
+                True,
+                ButtonPressMask|ButtonReleaseMask|PointerMotionMask,
+                GrabModeAsync,
+                GrabModeAsync,
+                None,
+                None);
+
 }
 
 Window XLibDesktop::getWindowByPID(unsigned long pid)
@@ -294,16 +295,57 @@ void XLibDesktop::loop()
 
 void XLibDesktop::tiling()
 {
+    unsigned int nonFloatingWindows = 0;
+
+    using lbPair = std::pair<const long unsigned int, 
+                             std::unique_ptr<IWindow>>;
+
+    // couting only non-floating windows to calcule the areas
+    // for tiling them.
+    std::for_each(
+            _desktops[_currentDesktop].begin(),
+            _desktops[_currentDesktop].end(),
+
+            // lambda - use nonFloatingWindows variable as
+            // reference, it will be incresead if the window is
+            // not floating
+            [&nonFloatingWindows](lbPair& wnd)
+                { 
+                    if (!wnd.second->floating())
+                        ++nonFloatingWindows;
+                }
+            );
+
     // get where the windows will be located and their size
     // in the screen based on how many windows must be displayed.
     std::vector<position_t> areas = getAreas(
         width(_screenNumber),
         height(_screenNumber),
-        _desktops[_currentDesktop].size());
+        nonFloatingWindows);
 
     unsigned int i = 0;
     for (auto &kv : _desktops[_currentDesktop])
     {
+        // floating windows will be mapped using its default size.
+        if (kv.second->floating())
+        {
+            // get the window attributes for the floating window.
+            XWindowAttributes attributes;
+            XGetWindowAttributes(_display.get(),
+                                 kv.first,
+                                 &attributes);
+
+            // set the window desired location/size
+            kv.second->x      (attributes.x);
+            kv.second->y      (attributes.y);
+            kv.second->width  (attributes.width);
+            kv.second->height (attributes.height);
+
+            // bring it to upfront
+            kv.second->redraw();
+            continue;
+        }
+
         // fix small rounding errors and discount the status
         // bar size.
         if (areas[i].y < 10)
@@ -367,22 +409,14 @@ void XLibDesktop::mapRequest(XEvent &e, args_t &arg)
                          e.xmaprequest.window,
                          &transient);
 
-    // when opening a transient window we don't tile it but
-    // simply open using its default setup.
-    if (transient != None)
-    {
-        XSetWindowBorderWidth(_display.get(),  e.xmaprequest.window, 1);
-        XMapRaised(_display.get(), e.xmaprequest.window);
-        return;
-    }
-
     XLibWindow wnd(_display);
     std::unique_ptr<XLibWindow> pWindow(new XLibWindow(_display));
 
-    // TODO: we limit the number of programs opened by virtual
-    // desktop but we should handle window children (like config
-    // screens, popups, etc).. should it be opened floating?
+    // when opening a transient window we don't tile it but
+    // simply open using its default setup.
+    pWindow->floating(transient != None);
 
+    // set parent and window id for controlling.
     pWindow->parent(e.xmaprequest.parent);
     pWindow->window(e.xmaprequest.window);
 
@@ -404,6 +438,15 @@ void XLibDesktop::mapRequest(XEvent &e, args_t &arg)
                 std::move(pWindow)
                 )
             );
+
+    // not force configure event event for floating windows
+    if (transient != None)
+    {
+        // map the window and bring it to the top of the stack.
+        XRaiseWindow(_display.get(), e.xmaprequest.window);
+
+        return;
+    }
 
     // disable request processing for now.
     XGrabServer(_display.get());
@@ -592,6 +635,9 @@ void XLibDesktop::motionNotify(XEvent &e, args_t &arg)
 
     //std::cout << "mouse move\n";
     IWindow &rWindow = *desktop[arg.windowid];
+
+    if (!rWindow.floating())
+        return;
 
     int xdiff = e.xbutton.x_root - arg.buttonPosition.x;
     int ydiff = e.xbutton.y_root - arg.buttonPosition.y;

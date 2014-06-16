@@ -76,6 +76,9 @@ class IWindow
         std::string name()  const { return _name; }
         std::string title() const { return _title; }
 
+        // Is a floating window or tiling?
+        bool floating()     const { return _floating; }
+
         // Returns window's identification.
         pid_t pid()         const { return _pid; }
         whandler window()   const { return _windowid; }
@@ -96,6 +99,9 @@ class IWindow
         void window(whandler wid)    { _windowid = wid; }
         void parent(whandler wid)    { _parentid = wid; }
 
+        // Sets whether it's a floating window.
+        void floating(bool floating)   { _floating = floating; }
+
     private:
         // x coordinate (pixels).
         int _x;
@@ -108,6 +114,9 @@ class IWindow
 
         // Window height (pixels).
         int _height;
+
+        // Window will be floating?
+        bool _floating;
 
         // Process PID.
         pid_t _pid;

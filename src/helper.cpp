@@ -71,45 +71,47 @@ int helper::callProgram(const char *program,
     int pipefdErr[2];
     int programLen = strlen(program);
 
-    // clear the strings to store the data
+    // clear the strings to store the data.
     output.clear();
     error.clear();
 
-    // create a pipe to handle programs output
+    // create a pipe to handle programs output.
     if (pipe(pipefdOut) == -1)
         return -1;
 
     if (pipe(pipefdErr) == -1)
         return -1;
 
-    // create a child process
+    // create a child process.
     pid_t pid = fork();
 
-    // failed to fork: return
+    // failed to fork: return.
     if (pid < 0)
         return -2;
 
-    // child process
+    // child process.
     if (pid == 0)
     {
-        setsid();
+        // start a new session (become a leader of this new session).
+        if (setsid() == -1)
+            return -3;
 
         int result = 0;
 
         // close the read descriptor because this child will only
-        // write in the pipe
+        // write in the pipe.
         close(pipefdOut[0]);
         close(pipefdErr[0]);
 
         // make pipe's write descriptor the stdout for this child
         // process then close the pipefd because we don't want to
-        // have 2 copies of the same descriptor
+        // have 2 copies of the same descriptor.
         dup2(pipefdOut[1], 1);
         close(pipefdOut[1]);
 
         // make pipe's write descriptor the stderr for this child
         // process then close the pipefd because we don't want to
-        // have 2 copies of the same descriptor
+        // have 2 copies of the same descriptor.
         dup2(pipefdErr[1], 2);
         close(pipefdErr[1]);
 
@@ -120,18 +122,18 @@ int helper::callProgram(const char *program,
         //       execvpe
         char **cparams = new char*[ params.size() + 2 ];
 
-        // intializes array
+        // intializes array.
         unsigned int i;
         for (i = 0; i < params.size() + 2; ++i)
             cparams[i] = nullptr;
 
-        // copy programs name (argv[0]) into the array
+        // copy programs name (argv[0]) into the array.
         cparams[0] = new char[programLen + 1];
         strncpy(cparams[0], program, programLen);
         cparams[0][programLen] = '\0';
 
         i = 1;
-        // copy all required parameters into the array
+        // copy all required parameters into the array.
         for (const char *param : params)
         {
             int paramLen = strlen(param);
@@ -141,7 +143,7 @@ int helper::callProgram(const char *program,
             ++i;
         }
 
-        // try to execute the program passed
+        // try to execute the program passed.
         if (execvpe(program, cparams, ENVIRONMENT) < 0)
         {
             std::cerr << "Command \"" << program << "\" not found" << std::endl;
@@ -149,7 +151,7 @@ int helper::callProgram(const char *program,
         }
 
         // clean the memory used case execvpe fails to execute the
-        // program passed
+        // program passed.
         for (i = 0; i < params.size() + 2; ++i)
         {
             if (cparams[i] == nullptr)
@@ -162,7 +164,7 @@ int helper::callProgram(const char *program,
         cparams = nullptr;
 
         // _exit() must be called instead of exit() because the later
-        // cleanup static storage and might flush stdio buffers twice
+        // cleanup static storage and might flush stdio buffers twice.
         _exit(result);
     }
 
@@ -172,23 +174,23 @@ int helper::callProgram(const char *program,
         char buffer;
 
         // close the write descriptor because the parent will only
-        // read from the pipe
+        // read from the pipe.
         close(pipefdOut[1]);
         close(pipefdErr[1]);
 
         // don't wait if we want programs running
-        // in background, simple return with the child pid
+        // in background, simple return with the child pid.
         if (background)
             return pid;
 
-        // wait for the command finishes
+        // wait for the command finishes.
         waitpid(pid, &status, 0);
 
-        // save the output results
+        // save the output results.
         while (read(pipefdOut[0], &buffer, 1) > 0)
             output += buffer;
 
-        // save the error results
+        // save the error results.
         while (read(pipefdErr[0], &buffer, 1) > 0)
             error += buffer;
 
