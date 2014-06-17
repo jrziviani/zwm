@@ -1,6 +1,7 @@
 bin_PROGRAMS = main
 
 AM_CPPFLAGS= \
+			 -Wall \
 			 -Iinclude \
 			 -Iinclude/xlibimp \
 			 $(ZWM_INCLUDES) \

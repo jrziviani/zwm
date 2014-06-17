@@ -362,6 +362,53 @@ void XLibDesktop::tiling()
     }
 }
 
+void XLibDesktop::changeFocus(bool next)
+{
+    Window focusSearchWnd;
+    int unused;
+
+    // get the window that has the focus.
+    XGetInputFocus(_display.get(), 
+                   &focusSearchWnd,
+                   &unused);
+
+    // ignore if no window has focus.
+    if (focusSearchWnd == None || focusSearchWnd == PointerRoot)
+        return;
+
+    // try to find the focused window in the map.
+    virtualDesktop::const_iterator focused = 
+        _desktops[_currentDesktop].find(focusSearchWnd);
+
+    Window newFocusWnd;
+
+    // set focus to first window if window not found
+    if (focused == _desktops[_currentDesktop].end())
+        newFocusWnd = _desktops[_currentDesktop].begin()->first;
+
+    else
+    {
+        // iterate the map to the next window available
+        ++focused;
+
+        // set focus to first window if window not found
+        if (focused == _desktops[_currentDesktop].end())
+            newFocusWnd = _desktops[_currentDesktop].begin()->first;
+    
+        // or use the next one
+        else
+            newFocusWnd = focused->first;
+    }
+
+    // raise the window (just in case) and set the focus
+    XMapRaised(_display.get(), newFocusWnd);
+
+    XSetInputFocus(_display.get(),
+                   newFocusWnd, 
+                   RevertToNone, 
+                   CurrentTime);
+}
+
 void XLibDesktop::setStatusBar()
 {
     /*_statusBar.x(0);
@@ -504,6 +551,12 @@ void XLibDesktop::keyPress(XEvent &e, args_t &arg)
             if (k.getProgram() == "quit")
             {
                 arg.buttonPressed = button_t::MIDDLE;
+                return;
+            }
+
+            if (k.getProgram() == "rotate")
+            {
+                changeFocus();
                 return;
             }
 
@@ -718,7 +771,7 @@ void XLibDesktop::configureNotify(XEvent &e, args_t &arg)
     // compress repeated events.
     while(XCheckTypedWindowEvent(_display.get(), e.xconfigure.window, ConfigureNotify, &e));
 
-    // ignore events for windows not mapped yet
+    // ignore events for windows not mapped yet.
     virtualDesktop &desktop = _desktops[_currentDesktop];
     if (desktop.find(e.xconfigure.window) == desktop.end())
     {
@@ -726,12 +779,19 @@ void XLibDesktop::configureNotify(XEvent &e, args_t &arg)
         return;
     }
 
-    // ignore configure notify not fired from the desktop
+    // ignore configure notify not fired from the desktop.
     if (e.xconfigure.event != _window)
         return;
 
-    // organize the windows
+    // organize the windows.
     tiling();
+
+    // set the focus in the window notified.
+    XSetInputFocus(_display.get(),
+                   e.xconfigure.window,
+                   RevertToParent, 
+                   CurrentTime);
+
 }
 
 void XLibDesktop::configureRequest(XEvent &e, args_t &arg)

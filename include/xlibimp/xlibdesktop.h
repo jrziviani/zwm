@@ -64,6 +64,9 @@ class XLibDesktop : public IDesktop
         // Organizes the windows in tiling mode
         void tiling();
 
+        // Changes the current window focus (next = false rotate anticlockwise)
+        void changeFocus(bool next = true);
+
     private:
 
         // Defines the accel keys in lib

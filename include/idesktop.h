@@ -112,12 +112,22 @@ class IDesktop
         //       font color, font size, etc.
         virtual void setStatusBar()                   = 0;
 
+        // order the windows in the desktop in a tiling fashion.
+        virtual void tiling()                         = 0;
+
+        // Changes the current window focus.
+        // (next = false rotate anticlockwise).
+        // TODO: we must change the structure from unordered map to
+        // ordered to have a better user behavior.
+        virtual void changeFocus(bool next = true)    = 0;
+
         // Returns the Window ID based on the Process ID.
         // NOTE: This information is not a standard, today it's
         //       WM responsibility to assign PID to a window.
         // TODO: Change this method for getWindowByAttributte to
         //       give it more flex.
         whandler getWindowByPID(unsigned long pid);
+
 
         //
         // GENERIC CODE
