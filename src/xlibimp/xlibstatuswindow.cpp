@@ -109,7 +109,7 @@ void XLibStatusWindow::updateClock()
 	    evt.xexpose.send_event = True;
 
         // send the event to be handled
-        XSendEvent(tmpDisplay, parent(), True, ExposureMask, &evt);
+        XSendEvent(tmpDisplay, /*parent()*/window(), True, ExposureMask, &evt);
         XFlush(tmpDisplay);
 
         usleep(500000);
