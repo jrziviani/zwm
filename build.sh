@@ -35,6 +35,22 @@ clean_configure()
         missing
 }
 
+update_todo()
+{
+    find . \( -name \*.h -o -name \*.cpp \) -exec grep TODO {} + \
+        | sed "s/^\(.\+.[cpp|h]:\).*\(TODO.*\)$$/\1 \2/" > TODO.list
+}
+
+run_valgrind()
+{
+    DISPLAY=:1 valgrind --tool=memcheck --leak-check=full  \
+               --track-origins=yes --suppressions=supp/xlib.supp \
+               --suppressions=supp/libxft.supp \
+               --show-reachable=yes ./main
+              #--gen-suppressions=all --log-file=libxft.supp \
+              #--show-reachable=yes xinit ./main -- :1
+}
+
 main()
 {
     local option="$1"
@@ -59,6 +75,16 @@ main()
         --clean-all)
             echo "Clean project"
             clean_configure
+            ;;
+
+        --valgrind)
+            echo "Running valgrind"
+            run_valgrind
+            ;;
+
+        --todo)
+            echo "Updating TODO file"
+            update_todo
             ;;
 
         *)

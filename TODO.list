@@ -1,15 +1,19 @@
-./src/xlibimp/xlibwindow.cpp: TODO: remove XSelectInput from here, a new method must be created.
-./src/xlibimp/xlibwindow.cpp: TODO: configure border width
-./src/xlibimp/xlibwindow.cpp: TODO: configure border color
-./src/xlibimp/xlibwindow.cpp: TODO: configure bg color
-./src/xlibimp/xlibdesktop.cpp: TODO: get the root window based on the screenNumber
-./src/main.cpp: TODO: accel keys should go to a config file */
-./src/main.cpp: TODO: implement a factory to create the real desktop
-./include/log.h: TODO: Profile this class.
-./include/log.h: TODO: Improve debug mode for speed.
-./include/iwindow.h: TODO: this method should receive parameters to be customized.
-./include/xlibimp/xlibwindow.h: TODO: const ref?
-./include/idesktop.h: TODO: status bar should accept parameter to configure
-./include/idesktop.h: TODO: Change this method for getWindowByAttributte to
-./include/keymap.h: TODO: Make it more flexible to accept actions (like ALT+TAB)
-./include/helper.h: TODO: fix the return type to pid.
+./src/xlibimp/xlibwindow.cpp:    // TODO: remove XSelectInput from here, a new method must be created.
+./src/xlibimp/xlibwindow.cpp:                                     0,                              // TODO: configure border width
+./src/xlibimp/xlibwindow.cpp:                                     0x00ff9944,                     // TODO: configure border color
+./src/xlibimp/xlibwindow.cpp:                                     BlackPixel(_display.get(), 0)); // TODO: configure bg color
+./src/xlibimp/xlibdesktop.cpp:// TODO: fix all code regarding position/size to use class properties
+./src/xlibimp/xlibdesktop.cpp:    // TODO: get the root window based on the screenNumber
+./src/xlibimp/xlibdesktop.cpp:    // TODO: investigate when this situation could happen (exit then?).
+./src/xlibimp/xlibdesktop.cpp:    // TODO: this setup should have been managed by pWindow.
+./src/main.cpp:/* TODO: accel keys should go to a config file */
+./src/main.cpp:    // TODO: implement a factory to create the real desktop
+./include/log.h:// TODO: Profile this class.
+./include/log.h:// TODO: Improve debug mode for speed.
+./include/iwindow.h:        // TODO: this method should receive parameters to be customized.
+./include/xlibimp/xlibwindow.h:        // TODO: const ref?
+./include/idesktop.h:        // TODO: status bar should accept parameter to configure
+./include/idesktop.h:        // TODO: we must change the structure from unordered map to
+./include/idesktop.h:        // TODO: Change this method for getWindowByAttributte to
+./include/keymap.h:// TODO: Make it more flexible to accept actions (like ALT+TAB)
+./include/helper.h:    // TODO: fix the return type to pid.
