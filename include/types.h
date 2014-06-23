@@ -28,4 +28,10 @@ struct position
     int y;
 };
 
+struct box
+{
+    position pos;
+    size sz;
+};
+
 #endif

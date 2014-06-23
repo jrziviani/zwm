@@ -5,11 +5,13 @@
 //
 // INCLUDES
 //
+#include "types.h"
 #include "xlibwindow.h"
 #include "xft.h"
 
 #include <thread>
 #include <mutex>
+#include <unordered_map>
 
 
 //
@@ -26,6 +28,9 @@ class XLibStatusWindow : public XLibWindow
 {
     public:
 
+        enum widgets { TITLES, DESKTOPS, CLOCK, INDICATORS };
+        enum alignment { LEFT, RIGHT };
+
         XLibStatusWindow(xlibpp_display &display);
         ~XLibStatusWindow();
 
@@ -35,11 +40,16 @@ class XLibStatusWindow : public XLibWindow
         // Initializes the graphic context.
         void initGraphic(int depth);
 
+        // Draws widgets.
+        void drawWidgets(widgets widget, alignment align);
+
         // Draws the active window title in the status bar.
-        void drawStatusTitle(const std::string &status);
+        void drawStatusTitle(const std::string &status, alignment align = LEFT);
+
+        void drawVirtualDesktops(unsigned int current, alignment align = LEFT);
 
         // Draws the clock in the status bar.
-        void drawClock();
+        void drawClock(alignment align = RIGHT);
 
         // Sets the clock in the status bar
         void setClock(const std::string &format);
@@ -59,6 +69,11 @@ class XLibStatusWindow : public XLibWindow
 
         // Last status string in status bar.
         std::string _lastStatus;
+
+        // Position of each widget in the status bar.
+        std::unordered_map<int, box> _positions;
+        int _left;
+        int _right;
 };
 
 #endif

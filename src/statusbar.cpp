@@ -29,12 +29,11 @@ int main()
     status.setColormap(DefaultColormap(dis.get(), 0));
     status.setVisual(DefaultVisual(dis.get(), 0));
     status.create(DefaultDepth(dis.get(), 0));
-    status.setClock("");
+    //status.setClock("");
 
     XSelectInput (dis.get(), status.window(), ExposureMask | KeyPressMask | ButtonPressMask);
 
-    status.drawStatusTitle("This is a test");
-    status.drawClock();
+    //status.drawClock();
 
     XEvent ev;
 
@@ -45,8 +44,11 @@ int main()
         switch (ev.type) {
 
             case Expose:
-                status.drawStatusTitle("This is a test");
-                status.drawClock();
+                status.drawWidgets(XLibStatusWindow::DESKTOPS, XLibStatusWindow::LEFT);
+                status.drawWidgets(XLibStatusWindow::TITLES, XLibStatusWindow::LEFT);
+                //status.drawVirtualDesktops(1);
+                //status.drawStatusTitle("This is a test");
+                //status.drawClock();
                 break;
 
             /*case ButtonPress:

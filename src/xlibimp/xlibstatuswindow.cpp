@@ -7,7 +7,9 @@
 
 
 XLibStatusWindow::XLibStatusWindow(xlibpp_display &display) :
-    XLibWindow(display)
+    XLibWindow(display),
+    _left(0),
+    _right(0)
 {
 }
 
@@ -41,30 +43,110 @@ void XLibStatusWindow::initGraphic(int depth)
                                 _colormap));
 }
 
-void XLibStatusWindow::drawStatusTitle(const std::string &status)
+void XLibStatusWindow::drawWidgets(widgets widget, alignment align)
 {
-    if (_lastStatus.length() > 0)
+    switch (widget)
     {
-        // get the string (pixels used to draw) size
-        size s = _xft->getStringSize(_lastStatus);
+        case TITLES:
+            drawStatusTitle("This is a title", align);
+            break;
 
+        case DESKTOPS:
+            drawVirtualDesktops(1, align);
+            break;
+    }
+}
+
+void XLibStatusWindow::drawStatusTitle(const std::string &status, alignment align)
+{
+    if (_lastStatus.length() > 0 && _lastStatus != status)
+    {
         // 'clear' the screen drawing the string.
         XClearArea(_display.get(), 
                    window(), 
-                   0, 
-                   0, 
-                   s.width, 
-                   height(), 
+                   _positions[TITLES].pos.x, 
+                   _positions[TITLES].pos.y, 
+                   _positions[TITLES].sz.width, 
+                   height(),
                    False);
     }
 
+    // get the string (pixels used to draw) size
+    size stringSize = _xft->getStringSize(status);
+
+    if (_positions.find(TITLES) == _positions.end())
+    {
+        box bx;
+        bx.pos.x = (align == LEFT) ? _left : _right;
+        bx.pos.y = 0;
+        bx.sz.width = stringSize.width;
+        bx.sz.height = height() - 5;
+        _positions.insert(std::make_pair(TITLES, bx));
+
+        if (align == LEFT)
+            _left += stringSize.width + 3;
+
+        else
+            _right += stringSize.width + 3;
+
+    }
+
     // draws the status bar in the window.
-    _xft->drawString(RED, 0, height() - 5, status);
+    _xft->drawString(RED,
+                    _positions[TITLES].pos.x, 
+                    height() - 5, 
+                    status);
 
    _lastStatus = status;
 }
 
-void XLibStatusWindow::drawClock()
+void XLibStatusWindow::drawVirtualDesktops(unsigned int current, alignment align)
+{
+    std::string virtDesktops = "[1] 2 3 4 5 6 7 8 9";
+
+    // get the string (pixels used to draw) size
+    size stringSize = _xft->getStringSize(virtDesktops);
+
+    if (_positions.find(DESKTOPS) == _positions.end())
+    {
+        box bx;
+        bx.pos.x = (align == LEFT) ? _left : _right;
+        bx.pos.y = 0;
+        bx.sz.width = stringSize.width;
+        bx.sz.height = height() - 5;
+        _positions.insert(std::make_pair(DESKTOPS, bx));
+
+        if (align == LEFT)
+            _left += stringSize.width + 3;
+
+        else
+            _right += stringSize.width + 3;
+    }
+
+    // draws the status bar in the window.
+    _xft->drawString(WHITE,
+                    _positions[DESKTOPS].pos.x, 
+                    height() - 5, 
+                    virtDesktops);
+
+    // get the string (pixels used to draw) size
+    //size s = _xft->getStringSize(virtDesktops);
+
+    /*XClearArea(_display.get(),
+               window(),
+                _positions[1],
+                0,
+                s.width,
+                height(),
+                False);
+
+    // draws the status bar in the window.
+    _xft->drawString(RED, _positions[0], height() - 5, virtDesktops);
+
+    _positions[1] = _positions[0] + s.width + 2;*/
+}
+
+void XLibStatusWindow::drawClock(alignment align)
 {
     time_t rawtime;
     tm *timeinfo;
